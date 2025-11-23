@@ -1,0 +1,183 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|c:\\users\\acer\\desktop\\codes\\dentalhorizoneprms\\dentalhorizoneprms\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|solutionrelative:dentalhorizoneprms\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|c:\\users\\acer\\desktop\\codes\\dentalhorizoneprms\\dentalhorizoneprms\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|solutionrelative:dentalhorizoneprms\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|c:\\users\\acer\\desktop\\codes\\dentalhorizoneprms\\dentalhorizoneprms\\pages\\authentication\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|solutionrelative:dentalhorizoneprms\\pages\\authentication\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|c:\\users\\acer\\desktop\\codes\\dentalhorizoneprms\\dentalhorizoneprms\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|solutionrelative:dentalhorizoneprms\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|c:\\users\\acer\\desktop\\codes\\dentalhorizoneprms\\dentalhorizoneprms\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|solutionrelative:dentalhorizoneprms\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|c:\\users\\acer\\desktop\\codes\\dentalhorizoneprms\\dentalhorizoneprms\\dentalhorizoneprms.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|solutionrelative:dentalhorizoneprms\\dentalhorizoneprms.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|c:\\users\\acer\\desktop\\codes\\dentalhorizoneprms\\dentalhorizoneprms\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|solutionrelative:dentalhorizoneprms\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|c:\\users\\acer\\desktop\\codes\\dentalhorizoneprms\\dentalhorizoneprms\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|solutionrelative:dentalhorizoneprms\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|c:\\users\\acer\\desktop\\codes\\dentalhorizoneprms\\dentalhorizoneprms\\pages\\authentication\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B52A28C9-75D3-4009-A3FB-060AE68FF917}|DentalHorizonePRMS\\DentalHorizonePRMS.csproj|solutionrelative:dentalhorizoneprms\\pages\\authentication\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\.gitignore",
+              "RelativeDocumentMoniker": "DentalHorizonePRMS\\.gitignore",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\.gitignore",
+              "RelativeToolTip": "DentalHorizonePRMS\\.gitignore",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAAAHUAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-23T04:53:41.065Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "DentalHorizonePRMS\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Properties\\launchSettings.json",
+              "RelativeToolTip": "DentalHorizonePRMS\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAACgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-23T04:14:18.789Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "DentalHorizonePRMS\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\appsettings.Development.json",
+              "RelativeToolTip": "DentalHorizonePRMS\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-23T04:14:13.932Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DentalHorizonePRMS.csproj",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\DentalHorizonePRMS.csproj",
+              "RelativeDocumentMoniker": "DentalHorizonePRMS\\DentalHorizonePRMS.csproj",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\DentalHorizonePRMS.csproj",
+              "RelativeToolTip": "DentalHorizonePRMS\\DentalHorizonePRMS.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-11-23T04:11:00.588Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Program.cs",
+              "RelativeDocumentMoniker": "DentalHorizonePRMS\\Program.cs",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Program.cs",
+              "RelativeToolTip": "DentalHorizonePRMS\\Program.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T14:20:55.3Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "DentalHorizonePRMS\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Controllers\\UserController.cs",
+              "RelativeToolTip": "DentalHorizonePRMS\\Controllers\\UserController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T13:33:48.376Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Repositories\\UserRepository.cs",
+              "RelativeDocumentMoniker": "DentalHorizonePRMS\\Repositories\\UserRepository.cs",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Repositories\\UserRepository.cs",
+              "RelativeToolTip": "DentalHorizonePRMS\\Repositories\\UserRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T13:33:31.279Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Login.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Pages\\Authentication\\Login.cshtml.cs",
+              "RelativeDocumentMoniker": "DentalHorizonePRMS\\Pages\\Authentication\\Login.cshtml.cs",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Pages\\Authentication\\Login.cshtml.cs",
+              "RelativeToolTip": "DentalHorizonePRMS\\Pages\\Authentication\\Login.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T13:29:49.632Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Pages\\Authentication\\Login.cshtml",
+              "RelativeDocumentMoniker": "DentalHorizonePRMS\\Pages\\Authentication\\Login.cshtml",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\codes\\DentalHorizonePRMS\\DentalHorizonePRMS\\Pages\\Authentication\\Login.cshtml",
+              "RelativeToolTip": "DentalHorizonePRMS\\Pages\\Authentication\\Login.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-22T13:29:35.069Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
