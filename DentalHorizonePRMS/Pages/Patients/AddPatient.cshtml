@@ -1,0 +1,33 @@
+﻿@page
+@model DentalHorizonePRMS.Pages.Patients.AddPatientModel
+@{
+	ViewData["Title"] = "Add Patient";
+}
+
+<h2>Add Patient</h2>
+
+<button id="showFormBtn" type="button">Add New Patient</button>
+
+<div id="patientForm" style="display:none; margin-top:20px">
+	<form method="post">
+		<div><label>Name:</label><input asp-for="CreateDTO.PatientName"></div>
+		<div><label>Address:</label><input asp-for="CreateDTO.Address"></div>
+		<div><label>Telephone:</label><input asp-for="CreateDTO.Telephone"></div>
+		<div><label>Age:</label><input asp-for="CreateDTO.Age"></div>
+		<div><label>Occupation:</label><input asp-for="CreateDTO.Occupation"></div>
+		<div><label>Complaint:</label><input asp-for="CreateDTO.Complaint"></div>
+		<div><label>Visit Status:</label><input asp-for="CreateDTO.VisitStatus"></div>
+		<div><label>Last Visit:</label><input asp-for="CreateDTO.LastVisit"></div>
+		<div><label>Next Appointment:</label><input asp-for="CreateDTO.NextAppointment"></div>
+		<div><label>Patient Status:</label><input asp-for="CreateDTO.PatientStatus"></div>
+		<div><label>Service:</label><input asp-for="CreateDTO.Service"></div>
+		<button type="submit">Add Patient</button>
+	</form>
+</div>
+
+<script>
+	document.getElementById("showFormBtn").addEventListener("click", function () {
+		const form = document.getElementById("patientForm");
+		form.style.display = form.style.display === "none" ? "block" : "none";
+	});
+</script>

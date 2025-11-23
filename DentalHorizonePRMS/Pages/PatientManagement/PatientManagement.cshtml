@@ -1,0 +1,40 @@
+﻿@page
+@model DentalHorizonePRMS.Pages.PatientManagement.PatientManagementModel
+@{
+	ViewData["Title"] = "Patient Management";
+}
+
+<h2>Patient Management</h2>
+
+<table class="table">
+	<thead>
+		<tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Occupation</th>
+            <th>Telephone</th>
+            <th>Address</th>
+            <th>Complaint</th>
+            <th>Next Appointment</th>
+            <th>Visit Status</th>
+            <th>Patient Status</th>
+            <th>Service</th>
+		</tr>
+	</thead>
+    <tbody>
+        @foreach (var patient in Model.Patients)
+        {
+            <tr>
+                <td>@patient.PatientName</td>
+                <td>@patient.Telephone</td>
+                <td>@patient.Address</td>
+                <td>@patient.Complaint</td>
+                <td>@patient.NextAppointment.ToShortDateString()</td>
+                <td>@patient.VisitStatus</td>
+                <td>@patient.PatientStatus</td>
+                <td>@patient.Service</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

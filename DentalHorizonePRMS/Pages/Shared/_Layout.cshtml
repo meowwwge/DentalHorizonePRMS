@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Dental Horizone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-14">
+            <!-- Brand -->
+            <a asp-page="/Home/Index" class="font-bold text-lg">Dental Horizone</a>
+
+            <!-- Desktop Links -->
+            <div class="flex space-x-6">
+                <a asp-page="/Home/Index" class="hover:underline">Home</a>
+                <a href="/Services" class="hover:underline">Services</a>
+                <a asp-page="/Dashboard/Index" class="hover:underline">Dashboard</a>
+                <a asp-page="/PatientManagement/Index" class="hover:underline">Patients</a>
+                <a asp-page="/Authentication/Login" class="hover:underline">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page content -->
+    <main class="max-w-7xl mx-auto px-4 mt-6">
+        @RenderBody()
+    </main>
+</body>
+</html>
