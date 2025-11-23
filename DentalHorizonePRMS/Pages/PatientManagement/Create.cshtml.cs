@@ -6,11 +6,6 @@ namespace DentalHorizonePRMS.Pages.PatientManagement
 {
     public class CreateModel : PageModel
     {
-        private readonly IPatientManagementRepository _patientManagementRepository;
-        public CreateModel(IPatientManagementRepository patientManagementRepository)
-        {
-			_patientManagementRepository = patientManagementRepository;
-
-		}
+        
     }
 }

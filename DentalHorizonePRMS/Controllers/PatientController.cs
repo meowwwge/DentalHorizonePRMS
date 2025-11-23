@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DentalHorizonePRMS.DTOs.Dashboard;
-using DentalHorizonePRMS.DTOs.PatientManagement;
 using DentalHorizonePRMS.DTOs.PatientMedicalHistory;
 using DentalHorizonePRMS.DTOs.Patients;
 using DentalHorizonePRMS.Entities;
@@ -16,62 +15,89 @@ namespace DentalHorizonePRMS.Controllers
     public class PatientController : ControllerBase
     {
         private readonly IPatientRepository _patientRepository;
-        private readonly IPatientManagementRepository _patientManagementRepository;
-        private readonly IDashboardRecordRepository _dashboardRecordRepository;
-        private readonly IPatientMedicalHistoryRepository _medicalHistoryRepository;
         private readonly IMapper _mapper;
 
-        public PatientController(IPatientRepository patientRepository, IPatientManagementRepository patientManagementRepository, IDashboardRecordRepository dashboardRecordRepository, IPatientMedicalHistoryRepository medicalHistoryRepository, IMapper mapper)
+        public PatientController(IPatientRepository patientRepository, IMapper mapper)
         {
             _patientRepository = patientRepository;
-            _patientManagementRepository = patientManagementRepository;
-            _dashboardRecordRepository = dashboardRecordRepository;
-            _medicalHistoryRepository = medicalHistoryRepository;
             _mapper = mapper;
         }
 
-        [HttpGet("full/{id}")]
-        public async Task<ActionResult<FullPatientResponseDTO>> GetFullPatientAsync(int id) 
+        [HttpGet("patient-management")]
+        public async Task<ActionResult<IEnumerable<PatientManagementDTO>>> GetPatientManagementAsync()
         {
-            var patient = await _patientRepository.GetByIdAsync(id);
-            if (patient == null) return NotFound();
-
-            var patientManagement = await _patientManagementRepository.GetByPatientIdAsync(id);
-            var dashboardRecord = await _dashboardRecordRepository.GetByPatientIdAsync(id);
-            var medicalHistory = await _medicalHistoryRepository.GetByPatientIdAsync(id);
-
-
-            var response = new FullPatientResponseDTO
-            {
-                Patient = _mapper.Map<PatientDTO>(patient),
-                PatientManagement = _mapper.Map<PatientManagementDTO>(patientManagement),
-                DashboardRecord = _mapper.Map<DashboardRecordDTO>(dashboardRecord),
-                PatientMedicalHistory = _mapper.Map<PatientMedicalHistoryDTO>(medicalHistory)
-            };
-
-            return Ok(response);
+            var patients = await _patientRepository.GetForManagementAsync();
+            return Ok(patients);
         }
 
-        [HttpGet("all")]
-        public async Task<List<Patient>> GetPatient() 
+        [HttpGet("finance")]
+        public async Task<ActionResult<IEnumerable<PatientFinanceDTO>>> GetPatientFinanceAsync()
         {
-            var patient = await _patientRepository.GetAllAsync();
-            return patient;
+            var patients = await _patientRepository.GetForFinanceAsync();
+            return Ok(patients);
+        }
+
+        [HttpGet("all-patients")]
+        public async Task<ActionResult<List<Patient>>> GetAllAsync()
+        {
+            var patients = await _patientRepository.GetAllPatientsAsync();
+            return Ok(patients);
         }
 
         [HttpPost("create-patient")]
-        public async Task<ActionResult<int>> CreatePatient([FromBody] FullPatientDetailsDTO createDTO) 
+        public async Task<ActionResult<int>> CreateAsync([FromBody] PatientCreateDTO createDto) 
         {
-            
-		    var patient = _mapper.Map<Patient>(createDTO);
-            var patientId = await _patientRepository.AddAsync(patient);
+            var patient = _mapper.Map<Patient>(createDto);
+            var patientId = await _patientRepository.AddPatientAsync(patient);
+            return Ok(patientId);
+        }
 
-            var managePatient = _mapper.Map<PatientManagementDTO>(createDTO);
-            managePatient.PatientId = patientId;
-            await _patientManagementRepository.AddAsync(managePatient);
+        [HttpPut("{id}/update-patient")]
+        public async Task<IActionResult> UpdateAsync([FromBody] PatientDTO patientDTO, int id) 
+        {
+            var existing = await _patientRepository.GetByIdAsync(id);
+            if (existing == null) return NotFound();
 
-			return Ok(patientId);
+            _mapper.Map(patientDTO, existing);
+            existing.Id = id;
 
+            var ok = await _patientRepository.UpdatePatientAsync(existing);
+            return ok ? NoContent() : StatusCode(500);
+        }
+
+        [HttpPost("{id}/soft-delete")]
+        public async Task<IActionResult> SoftDeleteAsync(int id) 
+        {
+            var softDelete = await _patientRepository.SoftDeletePatientAsync(id);
+            return softDelete ? NoContent() : NotFound();
+        }
+
+        [HttpPost("{id}/restore-patient")]
+        public async Task<IActionResult> RestoreAsync(int id) 
+        {
+            var restore = await _patientRepository.RestorePatientAsync(id);
+            return restore ? NoContent() : NotFound();
+        }
+
+        [HttpGet("upcoming-appointments")]
+        public async Task<ActionResult<IEnumerable<UpcomingAppointmentsDTO>>> GetUpcomingAsync() 
+        {
+            var upcomingAppointments = await _patientRepository.GetUpcomingAppointmentsAsync();
+            return Ok(upcomingAppointments);
+        }
+
+		[HttpGet("missed-appointments")]
+		public async Task<ActionResult<IEnumerable<MissedAppointmentsDTO>>> GetMissedAsycn()
+		{
+			var missedAppointments = await _patientRepository.GetMissedAppointmentsAsync();
+			return Ok(missedAppointments);
 		}
+
+        [HttpGet("dashboard-totals")]
+        public async Task<ActionResult<DashboardTotalsDTO>> GetTotalsAsync() 
+        {
+            var dashboardTotals = await _patientRepository.GetDashboardTotalsAsync();
+            return Ok(dashboardTotals);
+        }
 	}
 }

@@ -1,4 +1,6 @@
-﻿using DentalHorizonePRMS.Entities;
+﻿using AutoMapper;
+using DentalHorizonePRMS.DTOs.PatientMedicalHistory;
+using DentalHorizonePRMS.Entities;
 using DentalHorizonePRMS.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,26 +11,31 @@ namespace DentalHorizonePRMS.Controllers
     [ApiController]
     public class PatientMedicalHistoryController : ControllerBase
     {
-        private readonly IPatientMedicalHistoryRepository _patientMedicalHistoryRepository;
+        private readonly IPatientMedicalHistoryRepository _medicalHistoryRepository;
+        private readonly IMapper _mapper;
 
-        public PatientMedicalHistoryController(IPatientMedicalHistoryRepository patientMedicalHistoryRepository)
+        public PatientMedicalHistoryController(IPatientMedicalHistoryRepository medicalHistoryRepository, IMapper mapper)
         {
-            _patientMedicalHistoryRepository = patientMedicalHistoryRepository;
+            _medicalHistoryRepository = medicalHistoryRepository;
+            _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PatientMedicalHistory>> GetById(int id) 
+        [HttpPost("add-history")]
+        public async Task<ActionResult<int>> AddAsync([FromBody] PatientMedicalHistoryDTO historyDto) 
         {
-            var patientHistory = await _patientMedicalHistoryRepository.GetByIdAsync(id);
-            if (patientHistory == null) return NotFound();
-            return Ok(patientHistory);
-        }
+            var history = _mapper.Map<PatientMedicalHistory>(historyDto);
+            history.CreatedAt = DateTime.Now;
 
-        [HttpPost("medical-history")]
-        public async Task<ActionResult<int>> AddMedicalHistory(PatientMedicalHistory patientMedicalHistory) 
+            var id = await _medicalHistoryRepository.AddMedicalHistoryAsync(history);
+            return Ok(id);
+		}
+
+
+        [HttpGet("{patientId}")]
+        public async Task<ActionResult<List<PatientMedicalHistory>>> GetByPatientIdAsync(int patientId) 
         {
-            var newId = await _patientMedicalHistoryRepository.AddAsync(patientMedicalHistory);
-            return CreatedAtAction(nameof(GetById), new { Id = newId }, newId);
+            var history = await _medicalHistoryRepository.GetByPatientIdAsync(patientId);
+            return Ok(history);
         }
     }
 }

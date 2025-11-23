@@ -1,8 +1,7 @@
 ﻿namespace DentalHorizonePRMS.DTOs.Patients
 {
-	public class PatientDTO
+	public class PatientCreateDTO
 	{
-		public int Id { get; set; }
 		public string PatientName { get; set; } = null!;
 		public string Address { get; set; } = null!;
 		public string Telephone { get; set; } = null!;
@@ -13,10 +12,8 @@
 		public DateTime? NextAppointment { get; set; }
 		public string Service { get; set; } = null!;
 		public string VisitStatus { get; set; } = null!;
-		public string Status { get; set; } = null!;
-		public string PatientStatus { get; set; } = null!;
+		public string PatientStatus { get; set; } = null!; 
 		public decimal Debit { get; set; }
 		public decimal Credit { get; set; }
-		public decimal Balance => Debit - Credit;
 	}
 }

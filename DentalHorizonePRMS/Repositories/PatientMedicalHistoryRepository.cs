@@ -14,34 +14,32 @@ namespace DentalHorizonePRMS.Repositories
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection")!;
         }
-        public async Task<int> AddAsync(PatientMedicalHistory patientMedicalHistory)
-        {
-            using (var connection = new SqlConnection(_connectionString)) 
-            {
-                var query = @"INSERT INTO PatientMedicalHistory (PatientId, KnownAllergies, CurrentMedications, PrimaryPhysician, EmergencyContactName, EmergencyContactNumber)
-                              VALUES (@PatientId, @KnownAllergies, @CurrentMedications, @PrimaryPhysician, @EmergencyContactName, @EmergencyContactNumber)
-                              SELECT CAST(SCOPE_IDENTITY() AS INT)";
 
-                return await connection.ExecuteScalarAsync<int>(query, patientMedicalHistory);
-            }
-        }
+		public async Task<int> AddMedicalHistoryAsync(PatientMedicalHistory patientMedicalHistory)
+		{
+			using (var connection = new SqlConnection(_connectionString)) 
+			{
+				var query = @"INSERT INTO PatientMedicalHistory (
+									PatientId, KnownAllergies, CurrentMedications, ChronicConditions,
+									PrimaryPhysicianOrDentist, EmergencyContactName, EmergencyContactNumber, CreatedAt)
+							  VALUES (
+									@PatientId, @KnownAllergies, @CurrentMedications, @ChronicConditions,
+									@PrimaryPhysicianOrDentist, @EmergencyContactName, @EmergencyContactNumber, @CreatedAt);
+							  SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
-        public async Task<PatientMedicalHistory?> GetByIdAsync(int id)
-        {
-            using (var connection = new SqlConnection(_connectionString)) 
-            {
-                var query = @"SELECT * FROM PatientMedicalHistory WHERE Id = @Id";
-                return await connection.QueryFirstOrDefaultAsync<PatientMedicalHistory>(query, new { Id = id});
-            }
-        }
+				return await connection.ExecuteScalarAsync<int>(query, patientMedicalHistory);
+			}
+		}
 
-        public async Task<PatientMedicalHistory?> GetByPatientIdAsync(int patientId)
-        {
-          using (var connection = new SqlConnection(_connectionString))
-            {
-                var query = @"SELECT * FROM PatientMedicalHistory WHERE PatientId = @PatientId";
-                return await connection.QueryFirstOrDefaultAsync<PatientMedicalHistory>(query, new { PatientId = patientId });
-            }
-        }
-    }
+		public async Task<List<PatientMedicalHistory>> GetByPatientIdAsync(int patientId)
+		{
+			using (var connection = new SqlConnection(_connectionString)) 
+			{
+				var query = @"SELECT * FROM PatientMedicalHistory WHERE PatientId = @PatientId";
+				var patient = await connection.QueryAsync<PatientMedicalHistory>(query, new { PatientId = patientId });
+
+				return patient.ToList();
+			}
+		}
+	}
 }

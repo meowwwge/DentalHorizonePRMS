@@ -34,8 +34,6 @@ builder.Services.AddAutoMapper(mapper =>
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IPatientRepository, PatientRepository>();
-builder.Services.AddTransient<IPatientManagementRepository, PatientManagementRepository>();
-builder.Services.AddTransient<IDashboardRecordRepository, DashboardRecordRepository>();
 builder.Services.AddTransient<IPatientMedicalHistoryRepository, PatientMedicalHistoryRepository>();
 #endregion
 
