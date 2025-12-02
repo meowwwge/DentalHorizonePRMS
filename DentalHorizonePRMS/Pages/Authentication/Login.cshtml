@@ -2,27 +2,81 @@
 @using DentalHorizonePRMS.Pages.Authentication
 @model LoginModel
 @{
-	ViewData["Title"] = "Login";
+    ViewData["Title"] = "Login";
     Layout = null;
 }
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-<h2>LOGIN</h2>
+<body class="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-sans"
+      style="background-image: url('/images/helloooo.png');">
 
-<form method="post">
-    @Html.AntiForgeryToken()
-    <div>
-        <label>Username</label>
-        <input asp-for="LoginDTO.Username" name="LoginDTO.Username" />
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-blue-400/50 z-0"></div>
+
+    <!-- Login Card -->
+    <div class="relative z-10 w-full max-w-md bg-white/40 backdrop-blur-md rounded-xl shadow-xl border border-white/20 hover:border-blue-400 transition duration-300 p-8 text-center">
+
+
+        <!-- Logo -->
+        <div class="flex justify-center mb-4">
+            <img src="/images/DHLOGO.png" alt="Dental Horizone Logo" class="w-40 h-auto" />
+        </div>
+
+        <!-- Welcome Text -->
+        <h2 class="text-2xl font-bold text-blue-900 mb-2">Welcome back</h2>
+        <p class="text-sm text-blue-700 mb-6">Please enter your account details</p>
+
+        <!-- Login Form -->
+        <form method="post" class="text-left">
+            @Html.AntiForgeryToken()
+
+            <!-- Username -->
+            <div class="mb-4">
+                <label class="block text-blue-800 text-sm mb-1">Username</label>
+                <div class="flex items-center border border-blue-300 rounded-md bg-blue-50 px-3 py-2">
+                    <svg class="w-4 h-4 text-blue-700 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 10a4 4 0 100-8 4 4 0 000 8zm-6 8a6 6 0 1112 0H4z" />
+                    </svg>
+                    <input asp-for="LoginDTO.Username" name="LoginDTO.Username"
+                           class="bg-transparent outline-none w-full text-blue-900"
+                           placeholder="Username" />
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4">
+                <label class="block text-blue-800 text-sm mb-1">Password</label>
+                <div class="flex items-center border border-blue-300 rounded-md bg-blue-50 px-3 py-2">
+                    <svg class="w-4 h-4 text-blue-700 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M5 8V6a5 5 0 1110 0v2H7V6z" />
+                    </svg>
+                    <input asp-for="LoginDTO.Password" name="LoginDTO.Password" type="password"
+                           class="bg-transparent outline-none w-full text-blue-900"
+                           placeholder="Password" />
+                </div>
+            </div>
+
+           
+
+            <!-- Submit Button -->
+            <button type="submit"
+                    class="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded-md transition duration-200">
+                Sign in
+            </button>
+
+            <!-- Error Message -->
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <p class="text-red-600 text-sm mt-4">@Model.ErrorMessage</p>
+            }
+        </form>
+
+
+       
     </div>
-    <div>
-        <label>Password</label>
-        <input asp-for="LoginDTO.Password" type="password" name="LoginDTO.Password" />
-    </div>
-    <button type="submit">Login</button>
-</form>
-
-
-@if (!string.IsNullOrEmpty(Model.ErrorMessage))
-{
-	<p style="color:red">@Model.ErrorMessage</p>	
-}
+</body>

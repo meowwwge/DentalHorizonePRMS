@@ -2,8 +2,46 @@
 @model DentalHorizonePRMS.Pages.Home.HomeModel
 @{
     ViewData["Title"] = "Home";
+    Layout = "_Layout";
 }
 
-<h1>Dental Horizone</h1>
+<div class="relative min-h-[calc(100vh-80px)] bg-cover bg-center bg-no-repeat text-white flex flex-col items-center justify-center px-6"
+     style="background-image: url('/images/teeth.jpg');">
 
-<p>Welcome to Dental Horizone! Use the navigation bar above to explore Services, Dashboard, Patient Management, Medical History, or Login.</p>
+    <!-- Dark overlay -->
+    <div class="absolute inset-0 bg-black/60"></div>
+
+    <!-- Content -->
+    <div class="relative w-full max-w-5xl flex flex-col items-center">
+        <!-- First line: smaller, centered, single line -->
+        <h1 class="text-4xl font-semibold mb-4 drop-shadow-lg text-center truncate">
+            Your digital dental assistant — smarter tools for modern clinics.
+        </h1>
+
+        <!-- Second paragraph: same size, aligned left -->
+        <p class="text-lg max-w-2xl mb-6 text-center">
+            Dental Horizone empowers dentists with smart tools for scheduling, patient records, and clinic management.
+        </p>
+
+        <a asp-page="/Dashboard/Index"
+           class="px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg shadow hover:bg-orange-600 transition">
+            Go to Dashboard
+        </a>
+
+        <!-- Feature Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-5xl">
+            <div class="bg-white/20 p-6 rounded-lg shadow text-white animate-fade-in">
+                <h3 class="text-xl font-semibold mb-2">Appointments</h3>
+                <p class="text-sm">Smart scheduling with reminders.</p>
+            </div>
+            <div class="bg-white/20 p-6 rounded-lg shadow text-white animate-fade-in delay-200">
+                <h3 class="text-xl font-semibold mb-2">Patient Records</h3>
+                <p class="text-sm">Secure and organized data management.</p>
+            </div>
+            <div class="bg-white/20 p-6 rounded-lg shadow text-white animate-fade-in delay-400">
+                <h3 class="text-xl font-semibold mb-2">Billing</h3>
+                <p class="text-sm">Automated invoicing and reporting.</p>
+            </div>
+        </div>
+    </div>
+</div>

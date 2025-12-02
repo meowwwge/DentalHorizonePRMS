@@ -1,4 +1,74 @@
 ﻿@page
 @model DentalHorizonePRMS.Pages.Patients.IndexModel
 @{
+    ViewData["Title"] = "Total Patients";
+    Layout = "_Layout";
 }
+
+<div class="min-h-[calc(100vh-80px)] bg-gradient-to-br from-white via-gray-50 to-gray-100 text-gray-800 px-6 py-6 font-poppins">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+            <svg class="w-7 h-7 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6h6v6m2 4H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2z" />
+            </svg>
+            <h1 class="text-3xl font-bold text-gray-800">Total Patients</h1>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="flex gap-3">
+            <button class="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded hover:bg-blue-700 transition">
+                Filter by Month
+            </button>
+            <button class="px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded hover:bg-green-700 transition">
+                Filter by Year
+            </button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow-md border border-gray-200">
+        <table class="min-w-full text-sm text-left text-gray-700">
+            <thead class="bg-gray-100 text-xs uppercase text-gray-600">
+                <tr>
+                    <th class="px-4 py-3">Name</th>
+                    <th class="px-4 py-3">Age</th>
+                    <th class="px-4 py-3">Occupation</th>
+                    <th class="px-4 py-3">Telephone</th>
+                    <th class="px-4 py-3">Address</th>
+                    <th class="px-4 py-3">Date of Visit</th>
+                    <th class="px-4 py-3">Complaint</th>
+                    <th class="px-4 py-3">Debit</th>
+                    <th class="px-4 py-3">Credit</th>
+                    <th class="px-4 py-3">Balance</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example row -->
+                <tr class="border-t">
+                    <td class="px-4 py-3">Libertine Valdehueza</td>
+                    <td class="px-4 py-3">21</td>
+                    <td class="px-4 py-3">Veterinary Doctor</td>
+                    <td class="px-4 py-3">09123456789</td>
+                    <td class="px-4 py-3">Dipolog City</td>
+                    <td class="px-4 py-3">2025-12-01</td>
+                    <td class="px-4 py-3">Toothache</td>
+                    <td class="px-4 py-3">₱1,000</td>
+                    <td class="px-4 py-3">₱1,000</td>
+                    <td class="px-4 py-3">₱0</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Completed</span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <button class="text-blue-600 hover:underline text-xs">Edit</button>
+                        <button class="text-red-600 hover:underline text-xs ml-2">Delete</button>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</div>

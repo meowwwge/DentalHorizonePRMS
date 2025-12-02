@@ -4,30 +4,42 @@
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - Dental Horizone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Tailwind CSS -->
-    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: {
+                inter: ['Inter', 'sans-serif'],
+                poppins: ['Poppins', 'sans-serif'],
+                lato: ['Lato', 'sans-serif'],
+              }
+            }
+          }
+        }
+    </script>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="min-h-screen font-poppins">
+    <!-- Semi-transparent, blurred blue navbar -->
+    <nav class="bg-blue-600/70 backdrop-blur-md text-white shadow h-20">
+        <div class="flex justify-between items-center pl-4 pr-4">
+            <a asp-page="/Home/Index" class="flex items-center">
+                <img src="/images/DHLOGO.png" alt="Dental Horizone Logo" class="h-20" />
+            </a>
 
-    <!-- Navbar -->
-    <nav class="bg-blue-600 text-white">
-        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-14">
-            <!-- Brand -->
-            <a asp-page="/Home/Index" class="font-bold text-lg">Dental Horizone</a>
-
-            <!-- Desktop Links -->
             <div class="flex space-x-6">
-                <a asp-page="/Home/Index" class="hover:underline">Home</a>
-                <a href="/Services" class="hover:underline">Services</a>
-                <a asp-page="/Dashboard/Index" class="hover:underline">Dashboard</a>
-                <a asp-page="/PatientManagement/Index" class="hover:underline">Patients</a>
-                <a asp-page="/Authentication/Login" class="hover:underline">Logout</a>
+                <a asp-page="/Home/Index" class="text-white font-semibold border-b-2 border-white pb-1">Home</a>
+                <a asp-page="/Services/Index" class="hover:text-gray-200">Services</a>
+                <a asp-page="/Dashboard/Index" class="hover:text-gray-200">Dashboard</a>
+                <a asp-page="/PatientManagement/Index" class="hover:text-gray-200">Patient Management</a>
+                <a asp-page="/Authentication/Login" class="hover:text-gray-200">Logout</a>
             </div>
         </div>
     </nav>
 
-    <!-- Page content -->
-    <main class="max-w-7xl mx-auto px-4 mt-6">
+    <!-- Page-specific content goes here -->
+    <main class="min-h-[calc(100vh-80px)]">
         @RenderBody()
     </main>
 </body>

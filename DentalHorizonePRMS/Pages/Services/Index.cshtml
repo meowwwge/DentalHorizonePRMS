@@ -1,9 +1,251 @@
 ﻿@page
 @model DentalHorizonePRMS.Pages.Services.IndexModel
 @{
-	ViewData["Title"] = "Services";
-	Layout = "_Layout";
+    ViewData["Title"] = "Services";
+    Layout = "_Layout";
 }
 
-<h1>Dental Horizone Services</h1>
+<script>
+    function togglePatientForm() {
+        const modal = document.getElementById('patientFormModal');
+        modal.classList.toggle('hidden');
+    }
+</script>
 
+<div class="min-h-[calc(100vh-80px)] bg-gradient-to-br from-white via-gray-50 to-gray-100 text-gray-800 px-6 py-6 font-poppins">
+
+    <!-- Header with Icon and Add Patient Button -->
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+            <svg class="w-7 h-7 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <h1 class="text-3xl font-bold text-gray-800">Dental Services</h1>
+        </div>
+        <button onclick="togglePatientForm()" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition">
+            Add Patient
+        </button>
+    </div>
+
+    <!-- Intro Paragraph -->
+    <p class="text-sm text-gray-600 mb-10 max-w-3xl">
+        A complete catalog of dental services with standardized descriptions and pricing for clinic use.
+    </p>
+
+
+
+    <!-- Services Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <!-- Consultation (General) -->
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 shadow-md hover:shadow-lg hover:border-blue-400 transition duration-300">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Consultation</h2>
+            <p class="text-sm text-gray-700 mb-2">Professional dental assessment and advice.</p>
+            <div class="text-sm font-bold text-blue-600">₱500</div>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">General</span>
+            </div>
+        </div>
+
+        <!-- Cleaning / Prophylaxis (Preventive) -->
+        <div class="bg-green-50 border border-green-200 rounded-xl p-6 shadow-md hover:shadow-lg hover:border-green-400 transition duration-300">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Cleaning / Prophylaxis</h2>
+            <p class="text-sm text-gray-700 mb-2">Mild to severe plaque removal and polishing.</p>
+            <div class="text-sm font-bold text-green-600">₱1,000 – ₱3,000</div>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">Preventive</span>
+            </div>
+        </div>
+
+        <!-- Tooth Extraction (Surgical) -->
+        <div class="bg-red-50 border border-red-200 rounded-xl p-6 shadow-md hover:shadow-lg hover:border-red-400 transition duration-300">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Tooth Extraction</h2>
+            <p class="text-sm text-gray-700 mb-2">From deciduous to impacted tooth removal.</p>
+            <div class="text-sm font-bold text-red-600">₱500 – ₱5,000</div>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full">Surgical</span>
+            </div>
+        </div>
+
+        <!-- Tooth Filling (Restorative) -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-md hover:shadow-lg hover:border-yellow-400 transition duration-300">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Tooth Filling</h2>
+            <p class="text-sm text-gray-700 mb-2">GIC, composite, and temporary restorations.</p>
+            <div class="text-sm font-bold text-yellow-600">₱1,000 – ₱3,000</div>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded-full">Restorative</span>
+            </div>
+        </div>
+
+        <!-- Veneers (Cosmetic) -->
+        <div class="bg-pink-50 border border-pink-200 rounded-xl p-6 shadow-md hover:shadow-lg hover:border-pink-400 transition duration-300">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Veneers</h2>
+            <p class="text-sm text-gray-700 mb-2">Cosmetic enhancement using composite or porcelain.</p>
+            <div class="text-sm font-bold text-pink-600">₱5,000 – ₱15,000</div>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="bg-pink-100 text-pink-700 text-xs px-2 py-1 rounded-full">Cosmetic</span>
+            </div>
+        </div>
+
+        <!-- Jacket Crown (Restorative) -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-md hover:shadow-lg hover:border-yellow-400 transition duration-300">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Jacket Crown</h2>
+            <p class="text-sm text-gray-700 mb-2">Rare tooth covering using ceramic, porcelain or zirconia.</p>
+            <div class="text-sm font-bold text-yellow-600">₱5,000 – ₱15,000</div>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded-full">Restorative</span>
+            </div>
+        </div>
+
+        <!-- Retainer (Orthodontic) -->
+        <div class="bg-orange-50 border border-indigo-200 rounded-xl p-6 shadow-md hover:shadow-lg hover:border-indigo-400 transition duration-300">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Retainer</h2>
+            <p class="text-sm text-gray-700 mb-2">Post orthodontic appliance for upper and lower teeth.</p>
+            <div class="text-sm font-bold text-orange-600">₱3,000 – ₱5,000</div>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded-full">Orthodontic</span>
+            </div>
+        </div>
+
+        <!-- Plastic Denture (Removable) -->
+        <div class="bg-teal-50 border border-gray-200 rounded-xl p-6 shadow-md hover:shadow-lg hover:border-gray-400 transition duration-300">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Plastic Denture</h2>
+            <p class="text-sm text-gray-700 mb-2">Partial denture replacement.</p>
+            <div class="text-sm font-bold text-teal-600">₱1,000 per tooth</div>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="bg-teal-100 text-teal-700 text-xs px-2 py-1 rounded-full">Removable</span>
+            </div>
+        </div>
+
+        <!-- Full Denture (Full Arch) -->
+        <div class="bg-purple-50 border border-gray-200 rounded-xl p-6 shadow-md hover:shadow-lg hover:border-gray-400 transition duration-300">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Full Denture</h2>
+            <p class="text-sm text-gray-700 mb-2">Complete arch replacement of upper and lower teeth.</p>
+            <div class="text-sm font-bold text-purple-600">₱15,000 – ₱30,000</div>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full">Full Arch</span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Patient Form Modal -->
+<div id="patientFormModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white/70 backdrop-blur-md rounded-2xl shadow-2xl w-full max-w-5xl p-8 relative border border-gray-200">
+
+        <!-- Close Button -->
+        <button onclick="togglePatientForm()"
+                class="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-2xl font-bold transition">
+            &times;
+        </button>
+
+        <!-- Title -->
+        <h2 class="text-2xl font-bold mb-6 text-blue-900 flex items-center gap-2">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Patient
+        </h2>
+
+        <!-- Landscape Form Layout -->
+        <form class="space-y-8 text-sm text-gray-700">
+
+            <!-- Personal Information Row -->
+            <div class="grid grid-cols-4 gap-6">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Name</label>
+                    <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Age</label>
+                    <input type="number" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Occupation</label>
+                    <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Telephone</label>
+                    <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" />
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Address</label>
+                <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" />
+            </div>
+
+            <!-- Visit Information Row -->
+            <div class="grid grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Date of Visit</label>
+                    <input type="date" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Complaint</label>
+                    <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Next Appointment</label>
+                    <input type="date" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Service</label>
+                    <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition">
+                        <option>Consultation</option>
+                        <option>Cleaning / Prophylaxis</option>
+                        <option>Tooth Extraction</option>
+                        <option>Tooth Filling</option>
+                        <option>Veneers</option>
+                        <option>Jacket Crown</option>
+                        <option>Retainer</option>
+                        <option>Plastic Denture</option>
+                        <option>Full Denture</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Patient Status</label>
+                    <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition">
+                        <option>New</option>
+                        <option>Returning</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Visit Status</label>
+                    <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition">
+                        <option>Pending</option>
+                        <option>Completed</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Financial Information Row -->
+            <div class="grid grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Debit</label>
+                    <input type="number" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Credit</label>
+                    <input type="number" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Balance</label>
+                    <input type="number" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" />
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-right">
+                <button type="submit"
+                        class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-200">
+                    Add Patient
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+           
