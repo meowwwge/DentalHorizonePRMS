@@ -10,5 +10,6 @@
 		public string Complaint { get; set; } = null!;
 		public string Service { get; set; } = null!;
 		public string Status { get; set; } = null!;
+		public string VisitStatus { get; set; } = null!;
 	}
 }
