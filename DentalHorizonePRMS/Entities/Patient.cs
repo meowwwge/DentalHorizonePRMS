@@ -14,7 +14,7 @@
 		public string Service { get; set; } = null!;
 		public string PatientStatus { get; set; } = null!;
 		public string VisitStatus { get; set; } = null!;
-		public string Status { get; set; } = "Active";
+		public string Status { get; set; } = "Pending";
 		public decimal Debit { get; set; }
 		public decimal Credit { get; set; }
 		public decimal Balance => Debit - Credit;
