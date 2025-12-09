@@ -17,6 +17,6 @@
 		public string PatientStatus { get; set; } = null!;
 		public decimal Debit { get; set; }
 		public decimal Credit { get; set; }
-		public decimal Balance => Debit - Credit;
+		
 	}
 }
