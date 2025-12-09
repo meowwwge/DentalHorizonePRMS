@@ -1,7 +1,111 @@
 ﻿@page
 @model DentalHorizonePRMS.Pages.PatientManagement.IndexModel
 @{
-	ViewData["Title"] = "Patient Management";
+    ViewData["Title"] = "Patient Management";
+    Layout = "_Layout";
 }
 
-<h1>Patients</h1>
+<div class="min-h-screen bg-gradient-to-br from-white via-gray-50 to-gray-100 text-gray-800 px-6 py-8 font-poppins">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="flex items-center gap-2 text-3xl font-bold text-black-600">
+            <svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6h6v6m2 4H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2z" />
+            </svg>
+            Patient Management
+        </h1>
+
+        <!-- Filters -->
+        <div class="flex gap-4 items-center">
+            <div class="flex flex-col">
+                <label for="monthSelect" class="text-xs font-medium text-gray-600">Month</label>
+                <select id="monthSelect" class="border rounded-lg px-3 py-2 text-sm" onchange="filterCustom()">
+                    <option value="0">All</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="yearSelect" class="text-xs font-medium text-gray-600">Year</label>
+                <select id="yearSelect" class="border rounded-lg px-3 py-2 text-sm" onchange="filterCustom()">
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow-md border border-gray-200">
+        <table class="min-w-full text-sm text-left text-gray-700">
+            <thead class="bg-gray-100 text-xs uppercase text-gray-600">
+                <tr>
+                    <th class="px-4 py-3">Name</th>
+                    <th class="px-4 py-3">Age</th>
+                    <th class="px-4 py-3">Occupation</th>
+                    <th class="px-4 py-3">Telephone</th>
+                    <th class="px-4 py-3">Address</th>
+                    <th class="px-4 py-3">Date of Visit</th>
+                    <th class="px-4 py-3">Next Appointment</th>
+                    <th class="px-4 py-3">Complaint</th>
+                    <th class="px-4 py-3">Service</th>
+                    <th class="px-4 py-3">Debit</th>
+                    <th class="px-4 py-3">Credit</th>
+                    <th class="px-4 py-3">Balance</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3">Visit Status</th>
+                    <th class="px-4 py-3">Patient Status</th>
+                    <th class="px-4 py-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="patientsTable" class="divide-y divide-gray-100">
+               
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modals -->
+    <div id="deletePatientModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md animate-fadeIn">
+            <p class="text-red-700 font-semibold mb-4">Are you sure you want to delete this patient?</p>
+            <div class="text-right space-x-2">
+                <button onclick="deletePatient(currentPatientId)" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Delete</button>
+                <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md animate-fadeIn">
+            <p class="modal-message text-green-700 font-semibold mb-4">Patient updated successfully!</p>
+            <div class="text-right">
+                <button onclick="closeSuccessModal()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md animate-fadeIn">
+            <p class="modal-message text-red-700 font-semibold mb-4">Something went wrong.</p>
+            <div class="text-right">
+                <button onclick="closeErrorModal()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/patientFunction.js"></script>
+<script src="~/js/modals.js"></script>
+<script src="~/js/patientFormLogic.js"></script>
