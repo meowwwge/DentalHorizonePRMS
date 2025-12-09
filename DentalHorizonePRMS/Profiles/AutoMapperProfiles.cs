@@ -13,8 +13,6 @@ namespace DentalHorizonePRMS.Profiles
         {
 			CreateMap<PatientCreateDTO, Patient>().ReverseMap();
 			CreateMap<Patient, PatientDTO>().ReverseMap();
-			CreateMap<Patient, PatientManagementDTO>().ReverseMap();
-			CreateMap<Patient, PatientFinanceDTO>().ReverseMap();
 			CreateMap<User, UserDTO>().ReverseMap();
 			CreateMap<PatientMedicalHistory, PatientMedicalHistoryDTO>().ReverseMap();
 		}
