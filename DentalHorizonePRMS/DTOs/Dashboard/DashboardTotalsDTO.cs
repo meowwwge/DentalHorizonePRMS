@@ -5,5 +5,7 @@
 		public int TotalPatients { get; set; }
 		public int UpcomingAppointments { get; set; }
 		public int MissedAppointments { get; set; }
+		public int CancelledAppointments { get; set; }
+		public int NoAppointments { get; set; }
 	}
 }
