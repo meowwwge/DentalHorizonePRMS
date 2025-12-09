@@ -1,0 +1,21 @@
+﻿.input-error {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+    transition: all 0.3s ease;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 2px;
+    transition: opacity 0.3s ease;
+}
+
+.no-pointer {
+    pointer-events: none;
+}
+
+input[readonly] {
+    background-color: #f3f3f3;
+    cursor: not-allowed;
+}
