@@ -144,7 +144,6 @@ namespace DentalHorizonePRMS.Repositories
 			}
 		}
 
-
 		public async Task<DashboardTotalsDTO> GetDashboardTotalsAsync()
 		{
 			using (var connection = new SqlConnection(_connectionString))
@@ -195,8 +194,6 @@ namespace DentalHorizonePRMS.Repositories
 			}
 		}
 
-
-
 		public async Task<IEnumerable<UpcomingAppointmentsDTO>> GetUpcomingAppointmentsAsync()
 		{
 			using (var connection = new SqlConnection(_connectionString))
@@ -211,8 +208,6 @@ namespace DentalHorizonePRMS.Repositories
 				return await connection.QueryAsync<UpcomingAppointmentsDTO>(query);
 			}
 		}
-
-
 
 		public async Task<IEnumerable<MissedAppointmentsDTO>> GetMissedAppointmentsAsync()
 		{
@@ -243,7 +238,6 @@ namespace DentalHorizonePRMS.Repositories
 				return result > 0;
 			}
 		}
-
 
 		public async Task<IEnumerable<Patient>> GetPatientsByDateAsync(int? month, int? year)
 		{
@@ -313,6 +307,4 @@ namespace DentalHorizonePRMS.Repositories
 			}
 		}
 	}
-
-
 }
