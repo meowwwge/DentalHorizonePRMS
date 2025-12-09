@@ -2,24 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>@ViewData["Title"] - Dental Horizone</title>
+    <title>@ViewData["Title"] - Dental Horizon</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/tailwind.css" />
+    <link rel="stylesheet" href="~/css/styles.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
           theme: {
             extend: {
               fontFamily: {
-                inter: ['Inter', 'sans-serif'],
                 poppins: ['Poppins', 'sans-serif'],
-                lato: ['Lato', 'sans-serif'],
               }
             }
           }
         }
     </script>
 </head>
+
 <body class="min-h-screen font-poppins">
     <!-- Semi-transparent, blurred blue navbar -->
     <nav class="bg-blue-600/70 backdrop-blur-md text-white shadow h-20">
