@@ -22,20 +22,60 @@
     </script>
 </head>
 
+
+<!-- Logout Confirmation Modal -->
+<div id="logoutModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-sm p-6 text-center">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Confirm Logout</h2>
+        <p class="text-sm text-gray-600 mb-6">Are you sure you want to log out?</p>
+        <div class="flex justify-center gap-4">
+            <button onclick="closeLogoutModal()"
+                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
+                Cancel
+            </button>
+            <button onclick="proceedLogout()"
+                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+                Logout
+            </button>
+        </div>
+    </div>
+</div>
+
 <body class="min-h-screen font-poppins">
+
+    @{
+        var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+    }
+
     <!-- Semi-transparent, blurred blue navbar -->
-    <nav class="bg-blue-600/70 backdrop-blur-md text-white shadow h-20">
+    <nav class="sticky top-0 z-50 bg-blue-600/70 backdrop-blur-md text-white shadow h-20">
         <div class="flex justify-between items-center pl-4 pr-4">
             <a asp-page="/Home/Index" class="flex items-center">
                 <img src="/images/DHLOGO.png" alt="Dental Horizone Logo" class="h-20" />
             </a>
 
             <div class="flex space-x-6">
-                <a asp-page="/Home/Index" class="text-white font-semibold border-b-2 border-white pb-1">Home</a>
-                <a asp-page="/Services/Index" class="hover:text-gray-200">Services</a>
-                <a asp-page="/Dashboard/Index" class="hover:text-gray-200">Dashboard</a>
-                <a asp-page="/PatientManagement/Index" class="hover:text-gray-200">Patient Management</a>
-                <a asp-page="/Authentication/Login" class="hover:text-gray-200">Logout</a>
+                <a asp-page="/Home/Index"
+                   class="pb-1 border-b-2 @(currentPage == "/Home/Index" ? "border-white font-semibold" : "border-transparent hover:border-white")">
+                    Home
+                </a>
+                <a asp-page="/Services/Index"
+                   class="pb-1 border-b-2 @(currentPage == "/Services/Index" ? "border-white font-semibold" : "border-transparent hover:border-white")">
+                    Services
+                </a>
+                <a asp-page="/Dashboard/Index"
+                   class="pb-1 border-b-2 @(currentPage == "/Dashboard/Index" ? "border-white font-semibold" : "border-transparent hover:border-white")">
+                    Dashboard
+                </a>
+                <a asp-page="/PatientManagement/Index"
+                   class="pb-1 border-b-2 @(currentPage == "/PatientManagement/Index" ? "border-white font-semibold" : "border-transparent hover:border-white")">
+                    Patient Management
+                </a>
+                <a href="javascript:void(0);"
+                   onclick="openLogoutModal()"
+                   class="pb-1 border-b-2 border-transparent hover:border-red-400 text-red-200">
+                    Logout
+                </a>
             </div>
         </div>
     </nav>
@@ -44,5 +84,18 @@
     <main class="min-h-[calc(100vh-80px)]">
         @RenderBody()
     </main>
+
+    <script>
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('hidden');
+        }
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.add('hidden');
+        }
+        function proceedLogout() {
+            window.location.href = '/Authentication/Login';
+        }
+    </script>
+
 </body>
 </html>
