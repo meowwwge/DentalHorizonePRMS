@@ -395,6 +395,164 @@ async function loadYearOptions() {
     }
 }
 
+function addPatientToTable(patient) {
+    const tableBody = document.getElementById("patientsTable");
+    if (!tableBody || !patient || !patient.id) return;
+
+    const existingRow = tableBody.querySelector(`tr[data-patient-id="${patient.id}"]`);
+    if (existingRow) existingRow.remove();
+
+    const safeDate = (date) => {
+        try {
+            return date ? new Date(date).toLocaleDateString() : "N/A";
+        } catch {
+            return "N/A";
+        }
+    };
+
+    const row = document.createElement("tr");
+    row.setAttribute("data-patient-id", patient.id);
+
+    row.innerHTML = `
+        <td>${patient.patientName || "N/A"}</td>
+        <td>${patient.age ?? "N/A"}</td>
+        <td>${patient.occupation || "N/A"}</td>
+        <td>${patient.telephone || "N/A"}</td>
+        <td>${patient.address || "N/A"}</td>
+        <td>${safeDate(patient.dateOfVisit)}</td>
+        <td>${patient.nextAppointment ? safeDate(patient.nextAppointment) : "-"}</td>
+        <td>${patient.complaint || "N/A"}</td>
+        <td>${patient.service || "N/A"}</td>
+        <td>₱${(patient.debit ?? 0).toFixed(2)}</td>
+        <td>₱${(patient.credit ?? 0).toFixed(2)}</td>
+        <td>₱${(patient.balance ?? 0).toFixed(2)}</td>
+        <td>${patient.computedStatus || patient.status || "No appointments"}</td>
+        <td>${patient.visitStatus || "N/A"}</td>
+        <td>${patient.patientStatus || "N/A"}</td>
+        <td>
+            <button class="edit-btn px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700"
+            onclick='openEditPatientForm(${JSON.stringify(patient)})'>
+                Edit
+            </button>
+
+            <button 
+            class="delete-btn px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
+            onclick="PmDeleteModal(${patient.id})">
+                Delete
+            </button>
+
+        </td>
+    `;
+
+    tableBody.appendChild(row);
+}
+
+// -------------------- OPEN EDIT PATIENT FORM --------------------
+function openEditPatientForm(patient) {
+    currentPatientId = patient.id;
+
+    const modal = document.getElementById("pmEditModal");
+    modal.classList.remove("hidden");
+
+    const form = document.getElementById("pmEditForm");
+
+    // Fill fields
+    form.patientName.value = patient.patientName || "";
+    form.age.value = patient.age || "";
+    form.occupation.value = patient.occupation || "";
+    form.telephone.value = patient.telephone || "";
+    form.address.value = patient.address || "";
+    form.dateOfVisit.value = formatDate(patient.dateOfVisit);
+    form.nextAppointment.value = formatDate(patient.nextAppointment);
+    form.complaint.value = patient.complaint || "";
+    form.service.value = patient.service || "";
+    form.patientStatus.value = patient.patientStatus || "Active";
+    form.visitStatus.value = patient.visitStatus || "Pending";
+    form.debit.value = patient.debit || 0;
+    form.credit.value = patient.credit || 0;
+    form.balance.value = patient.balance || 0;
+
+    const debitField = form.debit;
+    const creditField = form.credit;
+    const balanceField = form.balance;
+
+    //Recalculate immediately when modal opens
+    updateBalance(debitField, creditField, balanceField);
+
+    //Auto-update when typing
+    debitField.oninput = () => updateBalance(debitField, creditField, balanceField);
+    creditField.oninput = () => updateBalance(debitField, creditField, balanceField);
+}
+
+// -------------------- CLOSE EDIT PATIENT MODAL --------------------
+function closePmEditModal() {
+    document.getElementById("pmEditModal").classList.add("hidden");
+}
+
+// -------------------- FORMAT DATE HELPER --------------------
+function formatDate(date) {
+    if (!date) return "";
+    const d = new Date(date);
+    return d.toISOString().split("T")[0];
+}
+
+// -------------------- SUBMIT EDIT PATIENT FORM --------------------
+async function submitPmEditForm(event) {
+    event.preventDefault();
+
+    if (!currentPatientId) {
+        console.error("No patient selected for editing.");
+        return;
+    }
+
+    const form = event.target;
+
+    const payload = {
+        patientName: form.patientName.value,
+        address: form.address.value,
+        telephone: form.telephone.value,
+        age: parseInt(form.age.value),
+        occupation: form.occupation.value,
+        complaint: form.complaint.value,
+        dateOfVisit: form.dateOfVisit.value
+            ? new Date(form.dateOfVisit.value).toISOString()
+            : null,
+        nextAppointment: form.nextAppointment.value
+            ? new Date(form.nextAppointment.value).toISOString()
+            : null,
+        service: form.service.value,
+        visitStatus: form.visitStatus.value,
+        status: form.visitStatus.value,
+        patientStatus: form.patientStatus.value,
+        debit: parseFloat(form.debit.value),
+        credit: parseFloat(form.credit.value),
+        balance: parseFloat(form.balance.value)
+    };
+
+
+    try {
+        const response = await fetch(`/api/Patient/${currentPatientId}/update-patient`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            closePmEditModal();
+            filterCustom();
+            showSuccessModal("Patient updated successfully!");
+        } else {
+            const errorText = await response.text();
+            console.error("Failed to update:", response.status, errorText);
+            showErrorModal("Failed to update patient: " + errorText);
+        }
+
+    } catch (err) {
+        console.error("Error updating patient:", err);
+        showErrorModal("Network error while updating patient.");
+    }
+}
+
 handleSearch(
     "searchUpcoming",
     "/api/Patient/search?status=Upcoming",
