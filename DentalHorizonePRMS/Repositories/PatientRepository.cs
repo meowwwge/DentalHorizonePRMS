@@ -239,33 +239,58 @@ namespace DentalHorizonePRMS.Repositories
 			}
 		}
 
-		public async Task<IEnumerable<Patient>> GetPatientsByDateAsync(int? month, int? year)
-		{
-			using (var connection = new SqlConnection(_connectionString)) 
-			{
-				var query = @"SELECT *,
-										CASE
-											WHEN NextAppointment < GETDATE() AND VisitStatus <> 'Completed' THEN 'Missed'
-											WHEN NextAppointment >= GETDATE() THEN 'Upcoming'
-											ELSE Status
-										END AS Status
-							  FROM Patient 
-							  WHERE 1=1";
+        public async Task<IEnumerable<Patient>> GetPatientsByDateAsync(int? month, int? year)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"SELECT *,
+                            CASE
+                                WHEN NextAppointment < GETDATE() AND VisitStatus <> 'Completed' THEN 'Missed'
+                                WHEN NextAppointment >= GETDATE() THEN 'Upcoming'
+                                ELSE Status
+                            END AS Status
+                      FROM Patient
+                      WHERE 1=1";
 
-				if (month.HasValue && year.HasValue)
-				{
-					query += " AND MONTH(DateOfVisit) = @Month AND YEAR(DateOfVisit) = @Year";
-				}
-				else if (year.HasValue) 
-				{
-					query += " AND YEAR(DateOfVisit) = @Year";
-				}
+                if (month.HasValue && month.Value > 0 && year.HasValue && year.Value > 0)
+                {
+                    //Filter by month + year
+                    query += @" AND DateOfVisit IS NOT NULL
+                        AND MONTH(DateOfVisit) = @Month
+                        AND YEAR(DateOfVisit) = @Year";
+                }
+                else if (month.HasValue && month.Value > 0)
+                {
+                    //Filter by month only
+                    query += @" AND DateOfVisit IS NOT NULL
+                        AND MONTH(DateOfVisit) = @Month";
+                }
+                else if (year.HasValue && year.Value > 0)
+                {
+                    //Filter by year only
+                    query += @" AND DateOfVisit IS NOT NULL
+                        AND YEAR(DateOfVisit) = @Year";
+                }
 
-				return await connection.QueryAsync<Patient>(query, new { Month = month, Year = year });
-			}
-		}
+                return await connection.QueryAsync<Patient>(query, new { Month = month, Year = year });
+            }
+        }
 
-		public async Task<IEnumerable<Patient>> GetInactivePatients() 
+        public async Task<List<int>> GetAvailableYearsAsync()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"SELECT DISTINCT YEAR(DateOfVisit) AS Year
+                      FROM Patient
+                      WHERE DateOfVisit IS NOT NULL
+                      ORDER BY Year DESC";
+
+                var years = await connection.QueryAsync<int>(query);
+                return years.ToList();
+            }
+        }
+
+        public async Task<IEnumerable<Patient>> GetInactivePatients() 
 		{
 			using (var connection = new SqlConnection(_connectionString)) 
 			{
