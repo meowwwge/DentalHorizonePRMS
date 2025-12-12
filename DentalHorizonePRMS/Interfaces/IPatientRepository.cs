@@ -19,6 +19,7 @@ namespace DentalHorizonePRMS.Interfaces
         Task<IEnumerable<MissedAppointmentsDTO>> GetMissedAppointmentsAsync();
         Task<bool> CancelAppointmentAsync(int id);
 		Task<IEnumerable<Patient>> GetPatientsByDateAsync(int? month, int? year);
+        Task<List<int>> GetAvailableYearsAsync();
         Task<IEnumerable<Patient>> GetInactivePatients();
         Task<bool> ReschedulePatientAsync(int id, DateTime nextAppointment);
         Task<IEnumerable<Patient>> SearchPatientsAsync(string keyword, string status);
