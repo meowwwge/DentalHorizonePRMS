@@ -38,8 +38,14 @@ async function loadPatients() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    loadPatients();
-    refreshTables();
+    const patientTable = document.getElementById("patientsTable");
+    const yearSelect = document.getElementById("yearSelect");
+
+    if (patientTable && yearSelect) {
+        loadYearOptions();
+        filterCustom();
+        refreshTables();
+    }
 });
 
 setInterval(refreshTables, 60000); // Auto-refresh every 60s
@@ -287,6 +293,107 @@ function handleSearch(inputId, endpoint, renderFn, fallbackEndpoint) {
     });
 }
 
+// -------------------- FILTER + SEARCH MAIN PATIENTS --------------------
+async function filterCustom() {
+    try {
+        const selectedMonth = document.getElementById("monthSelect").value;
+        const selectedYear = document.getElementById("yearSelect").value;
+        const searchTerm = document.getElementById("searchInput")?.value || "";
+
+        // ✅ Build base URL
+        let url = "/api/Patient/all-patients";
+
+        // ✅ Build query params based on your new rules
+        const params = [];
+
+        if (selectedMonth !== "0") {
+            params.push(`month=${selectedMonth}`);
+        }
+
+        if (selectedYear !== "All") {
+            params.push(`year=${selectedYear}`);
+        }
+
+        if (params.length > 0) {
+            url += "?" + params.join("&");
+        }
+
+        console.log("Fetching:", url);
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Failed to fetch patients:", response.status, errorText);
+            throw new Error(`Failed to fetch patients: ${response.status} ${errorText}`);
+        }
+
+        const patients = await response.json();
+        const tableBody = document.getElementById("patientsTable");
+        tableBody.innerHTML = "";
+
+        // ✅ Safe search: handle null/undefined names
+        const filtered = patients.filter(p => {
+            const name = (p.patientName || p.name || "").toLowerCase();
+            return name.includes(searchTerm.toLowerCase());
+        });
+
+        if (filtered.length === 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td colspan="16" class="px-4 py-6 text-center text-gray-500 italic">
+                    No patients found for the selected filters.
+                </td>
+            `;
+            tableBody.appendChild(row);
+            return;
+        }
+
+        filtered.forEach(patient => {
+            try {
+                addPatientToTable(patient);
+            } catch (rowErr) {
+                console.error("Error rendering patient row:", rowErr, patient);
+            }
+        });
+    } catch (error) {
+        console.error("Error filtering patients:", error);
+        showErrorModal("Unable to filter patient list. Please check your connection.");
+    }
+
+    console.log("Selected month:", selectedMonth);
+    console.log("Selected year:", selectedYear);
+    console.log("Fetch URL:", url);
+}
+
+// -------------------- LOAD YEAR OPTIONS --------------------
+async function loadYearOptions() {
+    try {
+        const response = await fetch("/api/Patient/available-years");
+        if (!response.ok) throw new Error("Failed to load years");
+
+        const years = await response.json();
+        const yearSelect = document.getElementById("yearSelect");
+
+        // Clear existing options
+        yearSelect.innerHTML = "";
+
+        // Add default "All" option
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "All";
+        defaultOption.textContent = "All";
+        yearSelect.appendChild(defaultOption);
+
+        // Add dynamic year options
+        years.forEach(year => {
+            const option = document.createElement("option");
+            option.value = year;
+            option.textContent = year;
+            yearSelect.appendChild(option);
+        });
+    } catch (err) {
+        console.error("Error loading year options:", err);
+    }
+}
 
 handleSearch(
     "searchUpcoming",
