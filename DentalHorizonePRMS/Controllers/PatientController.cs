@@ -26,7 +26,7 @@ namespace DentalHorizonePRMS.Controllers
         [HttpGet("all-patients")]
         public async Task<ActionResult<List<Patient>>> GetAllAsync([FromQuery] int? month, [FromQuery] int? year)
         {
-            if (month.HasValue || year.HasValue) 
+            if (month.HasValue && year.HasValue)
             {
                 var filtered = await _patientRepository.GetPatientsByDateAsync(month, year);
                 return Ok(filtered);
@@ -34,6 +34,13 @@ namespace DentalHorizonePRMS.Controllers
 
             var patients = await _patientRepository.GetAllPatientsAsync();
             return Ok(patients);
+        }
+
+        [HttpGet("available-years")]
+        public async Task<IActionResult> GetAvailableYears()
+        {
+            var years = await _patientRepository.GetAvailableYearsAsync();
+            return Ok(years);
         }
 
         [HttpGet("{id}")]
