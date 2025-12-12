@@ -193,14 +193,17 @@ async function submitPatientForm(e) {
         address: addressInput.value,
         dateOfVisit: new Date(form.querySelector("input[name='dateOfVisit']").value).toISOString(),
         complaint: complaintInput.value,
-        nextAppointment: nextAppointment,
+        nextAppointment: nextAppointment
+            ? new Date(nextAppointment).toISOString()
+            : null,
         service: form.querySelector("#service").value,
         patientStatus: form.querySelector("select[name='patientStatus']").value,
         visitStatus: form.querySelector("select[name='visitStatus']").value,
-        debit: parseFloat(debitField.value),
-        credit: parseFloat(creditField.value),
-        balance: parseFloat(balanceField.value)
+        debit: parseFloat(debitField.value) || 0,
+        credit: parseFloat(creditField.value) || 0,
+        balance: parseFloat(balanceField.value) || 0
     };
+
 
     try {
         const response = await fetch('/api/Patient/create-patient', {
@@ -253,46 +256,3 @@ document.addEventListener("input", (e) => {
         clearFieldError(target);
     }
 });
-
-function addPatientToTable(patient) {
-    const tableBody = document.getElementById("patientsTable");
-    if (!tableBody || !patient || !patient.id) return;
-
-    const existingRow = tableBody.querySelector(`tr[data-patient-id="${patient.id}"]`);
-    if (existingRow) existingRow.remove();
-
-    const safeDate = (date) => {
-        try {
-            return date ? new Date(date).toLocaleDateString() : "N/A";
-        } catch {
-            return "N/A";
-        }
-    };
-
-    const row = document.createElement("tr");
-    row.setAttribute("data-patient-id", patient.id);
-
-    row.innerHTML = `
-        <td>${patient.patientName || "N/A"}</td>
-        <td>${patient.age ?? "N/A"}</td>
-        <td>${patient.occupation || "N/A"}</td>
-        <td>${patient.telephone || "N/A"}</td>
-        <td>${patient.address || "N/A"}</td>
-        <td>${safeDate(patient.dateOfVisit)}</td>
-        <td>${patient.nextAppointment ? safeDate(patient.nextAppointment) : "-"}</td>
-        <td>${patient.complaint || "N/A"}</td>
-        <td>${patient.service || "N/A"}</td>
-        <td>₱${(patient.debit ?? 0).toFixed(2)}</td>
-        <td>₱${(patient.credit ?? 0).toFixed(2)}</td>
-        <td>₱${(patient.balance ?? 0).toFixed(2)}</td>
-        <td>${patient.computedStatus || patient.status || "No appointments"}</td>
-        <td>${patient.visitStatus || "N/A"}</td>
-        <td>${patient.patientStatus || "N/A"}</td>
-        <td>
-            <button class="text-blue-600 hover:underline">Edit</button>
-            <button class="text-red-600 hover:underline ml-2">Delete</button>
-        </td>
-    `;
-
-    tableBody.appendChild(row);
-}
