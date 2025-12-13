@@ -124,17 +124,17 @@ namespace DentalHorizonePRMS.Repositories
 			}
 		}
 
-		public async Task<bool> SoftDeletePatientAsync(int id)
-		{
-			using (var connection = new SqlConnection(_connectionString)) 
-			{
-				var query = @"UPDATE Patient SET PatientStatus = 'Inactive' WHERE Id = @Id";
-				var softDeleted = await connection.ExecuteAsync(query, new { Id = id });
-				return softDeleted > 0;
-			}
-		}
+        public async Task<bool> SoftDeletePatientAsync(int id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"DELETE FROM Patient WHERE Id = @Id";
+                var deleted = await connection.ExecuteAsync(query, new { Id = id });
+                return deleted > 0;
+            }
+        }
 
-		public async Task<bool> RestorePatientAsync(int id)
+        public async Task<bool> RestorePatientAsync(int id)
 		{
 			using (var connection = new SqlConnection(_connectionString)) 
 			{
