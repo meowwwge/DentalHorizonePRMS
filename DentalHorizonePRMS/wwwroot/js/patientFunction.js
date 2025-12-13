@@ -1,4 +1,6 @@
-﻿// -------------------- SAFE DATE HELPER --------------------
+﻿
+
+// -------------------- SAFE DATE HELPER --------------------
 function safeDate(date) {
     try {
         const parsed = new Date(date);
@@ -80,6 +82,8 @@ async function refreshTables() {
 // -------------------- UPCOMING --------------------
 function renderUpcoming(upcoming) {
     const tbody = document.getElementById("upcomingTable");
+    if (!tbody) return; //prevents crash
+
     tbody.innerHTML = "";
 
     if (!upcoming || upcoming.length === 0) {
@@ -110,12 +114,12 @@ function renderUpcoming(upcoming) {
                 </span>
             </td>
             <td class="px-4 py-3 space-x-2">
-                <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 reschedule-btn" 
-                        data-id="${p.id}" 
+                <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 reschedule-btn"
+                        data-id="${p.id}"
                         data-date="${p.nextAppointment}">
                     Reschedule
                 </button>
-                <button class="cancel-btn px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700" 
+                <button class="cancel-btn px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
                         data-id="${p.id}">
                     Cancel
                 </button>
@@ -125,9 +129,10 @@ function renderUpcoming(upcoming) {
     });
 }
 
-// -------------------- MISSED --------------------
 function renderMissed(missed) {
     const tbody = document.getElementById("missedTable");
+    if (!tbody) return; //prevents crash
+
     tbody.innerHTML = "";
 
     if (!missed || missed.length === 0) {
@@ -158,12 +163,12 @@ function renderMissed(missed) {
                 </span>
             </td>
             <td class="px-4 py-3 space-x-2">
-                <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 reschedule-btn" 
-                        data-id="${p.id}" 
+                <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 reschedule-btn"
+                        data-id="${p.id}"
                         data-date="${p.originalAppointmentDate ?? p.nextAppointment}">
                     Reschedule
                 </button>
-                <button class="cancel-btn px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700" 
+                <button class="cancel-btn px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
                         data-id="${p.id}">
                     Cancel
                 </button>
@@ -192,37 +197,43 @@ document.addEventListener("click", (e) => {
     }
 });
 
-document.getElementById("cancelReschedule").addEventListener("click", () => {
-    document.getElementById("rescheduleModal").classList.add("hidden");
-    currentPatientId = null;
-});
-
-document.getElementById("confirmReschedule").addEventListener("click", async () => {
-    const newDate = document.getElementById("newDate").value;
-    if (!newDate || !currentPatientId) return;
-
-    try {
-        const response = await fetch(`/api/Patient/${currentPatientId}/reschedule`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(new Date(newDate).toISOString())
-        });
-
-        if (response.ok) {
-            showSuccessModal("Appointment rescheduled successfully!");
-            await refreshTables();
-        } else {
-            const errorText = await response.text();
-            showErrorModal("Failed to reschedule: " + errorText);
-        }
-    } catch (err) {
-        console.error("Error rescheduling:", err);
-        showErrorModal("Network error while rescheduling.");
-    } finally {
+const cancelRescheduleBtn = document.getElementById("cancelReschedule");
+if (cancelRescheduleBtn) {
+    cancelRescheduleBtn.addEventListener("click", () => {
         document.getElementById("rescheduleModal").classList.add("hidden");
         currentPatientId = null;
-    }
-});
+    });
+}
+
+const confirmRescheduleBtn = document.getElementById("confirmReschedule");
+if (confirmRescheduleBtn) {
+    confirmRescheduleBtn.addEventListener("click", async () => {
+        const newDate = document.getElementById("newDate").value;
+        if (!newDate || !currentPatientId) return;
+
+        try {
+            const response = await fetch(`/api/Patient/${currentPatientId}/reschedule`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(new Date(newDate).toISOString())
+            });
+
+            if (response.ok) {
+                showSuccessModal("Appointment rescheduled successfully!");
+                await refreshTables();
+            } else {
+                const errorText = await response.text();
+                showErrorModal("Failed to reschedule: " + errorText);
+            }
+        } catch (err) {
+            console.error("Error rescheduling:", err);
+            showErrorModal("Network error while rescheduling.");
+        } finally {
+            document.getElementById("rescheduleModal").classList.add("hidden");
+            currentPatientId = null;
+        }
+    });
+}
 
 // -------------------- CANCEL --------------------
 document.addEventListener("click", async (e) => {
@@ -255,8 +266,6 @@ document.addEventListener("click", async (e) => {
         showErrorModal("Network error while cancelling.");
     }
 });
-
-
 
 // SEARCH
 function handleSearch(inputId, endpoint, renderFn, fallbackEndpoint) {
@@ -300,30 +309,18 @@ async function filterCustom() {
         const selectedYear = document.getElementById("yearSelect").value;
         const searchTerm = document.getElementById("searchInput")?.value || "";
 
-        // ✅ Build base URL
         let url = "/api/Patient/all-patients";
-
-        // ✅ Build query params based on your new rules
         const params = [];
 
-        if (selectedMonth !== "0") {
-            params.push(`month=${selectedMonth}`);
-        }
-
-        if (selectedYear !== "All") {
-            params.push(`year=${selectedYear}`);
-        }
-
-        if (params.length > 0) {
-            url += "?" + params.join("&");
-        }
+        if (selectedMonth !== "0") params.push(`month=${selectedMonth}`);
+        if (selectedYear !== "All") params.push(`year=${selectedYear}`);
+        if (params.length > 0) url += "?" + params.join("&");
 
         console.log("Fetching:", url);
 
         const response = await fetch(url);
         if (!response.ok) {
             const errorText = await response.text();
-            console.error("Failed to fetch patients:", response.status, errorText);
             throw new Error(`Failed to fetch patients: ${response.status} ${errorText}`);
         }
 
@@ -331,7 +328,6 @@ async function filterCustom() {
         const tableBody = document.getElementById("patientsTable");
         tableBody.innerHTML = "";
 
-        // ✅ Safe search: handle null/undefined names
         const filtered = patients.filter(p => {
             const name = (p.patientName || p.name || "").toLowerCase();
             return name.includes(searchTerm.toLowerCase());
@@ -348,21 +344,16 @@ async function filterCustom() {
             return;
         }
 
-        filtered.forEach(patient => {
-            try {
-                addPatientToTable(patient);
-            } catch (rowErr) {
-                console.error("Error rendering patient row:", rowErr, patient);
-            }
-        });
+        filtered.forEach(patient => addPatientToTable(patient));
+
+        console.log("Selected month:", selectedMonth);
+        console.log("Selected year:", selectedYear);
+        console.log("Fetch URL:", url);
+
     } catch (error) {
         console.error("Error filtering patients:", error);
         showErrorModal("Unable to filter patient list. Please check your connection.");
     }
-
-    console.log("Selected month:", selectedMonth);
-    console.log("Selected year:", selectedYear);
-    console.log("Fetch URL:", url);
 }
 
 // -------------------- LOAD YEAR OPTIONS --------------------
@@ -431,13 +422,13 @@ function addPatientToTable(patient) {
         <td>${patient.patientStatus || "N/A"}</td>
         <td>
             <button class="edit-btn px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700"
-            onclick='openEditPatientForm(${JSON.stringify(patient)})'>
+            onclick="openEditPatientForm(${patient.id})">
                 Edit
             </button>
 
             <button 
             class="delete-btn px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
-            onclick="PmDeleteModal(${patient.id})">
+            onclick="openPmDeleteModal(${patient.id})">
                 Delete
             </button>
 
@@ -448,8 +439,9 @@ function addPatientToTable(patient) {
 }
 
 // -------------------- OPEN EDIT PATIENT FORM --------------------
-function openEditPatientForm(patient) {
-    currentPatientId = patient.id;
+async function openEditPatientForm(id) {
+    const patient = await fetch(`/api/Patient/${id}`).then(r => r.json());
+    currentPatientId = id;
 
     const modal = document.getElementById("pmEditModal");
     modal.classList.remove("hidden");
@@ -476,10 +468,8 @@ function openEditPatientForm(patient) {
     const creditField = form.credit;
     const balanceField = form.balance;
 
-    //Recalculate immediately when modal opens
     updateBalance(debitField, creditField, balanceField);
 
-    //Auto-update when typing
     debitField.oninput = () => updateBalance(debitField, creditField, balanceField);
     creditField.oninput = () => updateBalance(debitField, creditField, balanceField);
 }
@@ -550,6 +540,41 @@ async function submitPmEditForm(event) {
     } catch (err) {
         console.error("Error updating patient:", err);
         showErrorModal("Network error while updating patient.");
+    }
+}
+
+// -------------------- DELETE PATIENT MODAL --------------------
+let patientIdToDelete = null;
+
+function openPmDeleteModal(id) {
+    patientIdToDelete = id;
+    document.getElementById("pmDeleteModal").classList.remove("hidden");
+}
+
+function closePmDeleteModal() {
+    patientIdToDelete = null;
+    document.getElementById("pmDeleteModal").classList.add("hidden");
+}
+
+async function confirmDeletePatient() {
+    if (!patientIdToDelete) return;
+
+    try {
+        const response = await fetch(`/api/Patient/${patientIdToDelete}/soft-delete`, {
+            method: "PUT"
+        });
+
+        if (response.ok) {
+            closePmDeleteModal();
+            filterCustom(); // refresh table
+            showSuccessModal("Patient deleted successfully!");
+        } else {
+            const errorText = await response.text();
+            showErrorModal("Failed to delete patient: " + errorText);
+        }
+    } catch (err) {
+        console.error("Delete error:", err);
+        showErrorModal("Network error while deleting patient.");
     }
 }
 
