@@ -178,7 +178,7 @@ namespace DentalHorizonePRMS.Repositories
 							FROM Patient
 							WHERE NextAppointment IS NOT NULL
 							  AND CAST(NextAppointment AS DATE) >= CAST(GETDATE() AS DATE)
-							  AND Status <> 'Cancelled'";
+							  AND Status = 'Upcoming'";
 
 				return await connection.QueryAsync<UpcomingAppointmentsDTO>(query);
 			}
@@ -270,18 +270,18 @@ namespace DentalHorizonePRMS.Repositories
 
 		public async Task<bool> CancelAppointmentAsync(int id)
 		{
-			using var connection = new SqlConnection(_connectionString);
-			var query = @"
-						UPDATE Patient
-						SET NextAppointment = NULL,
-							Status = 'Cancelled'
-						WHERE Id = @Id";
+			using (var connection = new SqlConnection(_connectionString)) 
+			{
+				var sql = @"
+						  UPDATE Patient
+						  SET Status = 'Cancelled'
+						  WHERE Id = @Id
+							AND Status <> 'Cancelled'";
 
-			var rowsAffected = await connection.ExecuteAsync(query, new { Id = id });
-			return rowsAffected > 0;
+				var rows = await connection.ExecuteAsync(sql, new { Id = id });
+				return rows > 0;
+			}
 		}
-
-
 
 		public async Task<IEnumerable<Patient>> SearchPatientsAsync(string keyword, string status)
 		{
