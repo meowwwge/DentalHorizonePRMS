@@ -53,13 +53,6 @@ namespace DentalHorizonePRMS.Controllers
             return Ok(patientDto);
         }
 
-        [HttpGet("inactive-patients")]
-        public async Task<IActionResult> GetInactivePatients() 
-        {
-            var patients = await _patientRepository.GetInactivePatients();
-            return Ok(patients);
-        }
-
 		[HttpGet("search")]
 		public async Task<IActionResult> Search([FromQuery] string keyword, [FromQuery] string status)
 		{
@@ -69,14 +62,21 @@ namespace DentalHorizonePRMS.Controllers
 
 
 		[HttpPost("create-patient")]
-        public async Task<ActionResult<int>> CreateAsync([FromBody] PatientCreateDTO createDto) 
-        {
-            var patient = _mapper.Map<Patient>(createDto);
-            var patientId = await _patientRepository.AddPatientAsync(patient);
-            return Ok(patientId);
-        }
+		public async Task<ActionResult<PatientDTO>> CreateAsync([FromBody] PatientCreateDTO createDto)
+		{
+			var patient = _mapper.Map<Patient>(createDto);
+			var patientId = await _patientRepository.AddPatientAsync(patient);
 
-        [HttpPut("{id}/update-patient")]
+			// Fetch the full patient record after insert
+			var created = await _patientRepository.GetByIdAsync(patientId);
+			if (created == null) return NotFound();
+
+			var dto = _mapper.Map<PatientDTO>(created);
+			return Ok(dto);
+		}
+
+
+		[HttpPut("{id}/update-patient")]
         public async Task<IActionResult> UpdateAsync(int id, [FromBody] PatientDTO patientDTO) 
         {
 			if (!ModelState.IsValid)
@@ -96,27 +96,6 @@ namespace DentalHorizonePRMS.Controllers
 			return Ok(_mapper.Map<PatientDTO>(existing));
 		}
 
-        [HttpPut("{id}/soft-delete")]
-        public async Task<IActionResult> SoftDeleteAsync(int id) 
-        {
-            var softDelete = await _patientRepository.SoftDeletePatientAsync(id);
-            if (softDelete)
-            {
-                return Ok(new { message = "Patient marked as inactive." });
-            }
-            else 
-            {
-                return NotFound(new { message = "Patient not found."});
-            }
-        }
-
-        [HttpPost("{id}/restore-patient")]
-        public async Task<IActionResult> RestoreAsync(int id) 
-        {
-            var restore = await _patientRepository.RestorePatientAsync(id);
-            return restore ? NoContent() : NotFound();
-        }
-
         [HttpGet("upcoming-appointments")]
         public async Task<ActionResult<IEnumerable<UpcomingAppointmentsDTO>>> GetUpcomingAsync() 
         {
@@ -131,14 +110,6 @@ namespace DentalHorizonePRMS.Controllers
 			return Ok(missedAppointments);
 		}
 
-		[HttpPut("{id}/cancel")]
-		public async Task<IActionResult> CancelAppointment(int id)
-		{
-			var success = await _patientRepository.CancelAppointmentAsync(id);
-			return success ? Ok() : BadRequest("Unable to cancel appointment.");
-		}
-
-
 		[HttpGet("dashboard-totals")]
         public async Task<ActionResult<DashboardTotalsDTO>> GetTotalsAsync() 
         {
@@ -146,15 +117,33 @@ namespace DentalHorizonePRMS.Controllers
             return Ok(dashboardTotals);
         }
 
-        [HttpPut("{id}/reschedule")]
-        public async Task<IActionResult> RescheduleAsync(int id, [FromBody] DateTime nextAppointment) 
-        {
-            var ok = await _patientRepository.ReschedulePatientAsync(id, nextAppointment);
-            if (!ok) return NotFound(new { message = "Patient not found or update failed." });
+		[HttpPut("{id}/reschedule")]
+		public async Task<IActionResult> RescheduleAsync(int id, [FromBody] DateTime nextAppointment)
+		{
+			var ok = await _patientRepository.ReschedulePatientAsync(id, nextAppointment);
+			if (!ok) return NotFound(new { message = "Patient not found or update failed." });
 
-            return Ok(new { message = "Appointment rescheduled successfully.", nextAppointment });
-        }
+			return Ok(new { message = "Appointment rescheduled successfully.", nextAppointment });
+		}
 
-        
+		[HttpPut("{id}/cancel-appointment")]
+		public async Task<IActionResult> CancelAppointmentAsync(int id)
+		{
+			var ok = await _patientRepository.CancelAppointmentAsync(id);
+			if (!ok) return NotFound(new { message = "Patient not found or cancel failed." });
+
+			return Ok(new { message = "Appointment cancelled successfully." });
+		}
+
+
+		[HttpGet("active-patients")]
+		public async Task<IActionResult> GetActivePatients()
+		{
+            var patients = await _patientRepository.GetAllActivePatientsAsync();
+			return Ok(patients);
+		}
+
+
+
 	}
 }
