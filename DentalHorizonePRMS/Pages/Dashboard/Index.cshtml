@@ -56,19 +56,7 @@
     </div>
 </div>
 
-<script>
-    async function loadDashboardTotals() {
-        try {
-            const res = await fetch('/api/patient/dashboard-totals');
-            const data = await res.json();
+@section Scripts {
+    <script src="~/js/dashboard/index.js"></script>
+}
 
-            document.getElementById("totalPatients").textContent = data.totalPatients;
-            document.getElementById("upcomingAppointments").textContent = data.upcomingAppointments;
-            document.getElementById("missedAppointments").textContent = data.missedAppointments;
-        } catch (error) {
-            console.error("Failed to load dashboard totals:", error);
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", loadDashboardTotals);
-</script>
