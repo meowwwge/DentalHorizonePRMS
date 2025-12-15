@@ -19,13 +19,7 @@ builder.Services.AddOutputCache(options =>
     options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(60);
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins("").AllowAnyMethod().AllowAnyHeader();
-    });
-});
+
 
 builder.Services.AddAutoMapper(mapper => 
 {
@@ -35,6 +29,7 @@ builder.Services.AddAutoMapper(mapper =>
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IPatientRepository, PatientRepository>();
 builder.Services.AddTransient<IPatientVisitHistory, PatientVisitHistoryRepository>();
+builder.Services.AddTransient<IArchivedPatientRepository, ArchivedPatientRepository>();
 #endregion
 
 var app = builder.Build();
