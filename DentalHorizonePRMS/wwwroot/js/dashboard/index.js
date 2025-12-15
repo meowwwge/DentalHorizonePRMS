@@ -1,12 +1,5 @@
-﻿// =====================================
-// DASHBOARD PAGE JS
-// =====================================
+﻿document.addEventListener("DOMContentLoaded", loadDashboardTotals);
 
-document.addEventListener("DOMContentLoaded", loadDashboardTotals);
-
-// -------------------------------------
-// LOAD DASHBOARD TOTALS
-// -------------------------------------
 async function loadDashboardTotals() {
     try {
         const res = await fetch("/api/patient/dashboard-totals");

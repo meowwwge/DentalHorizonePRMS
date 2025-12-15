@@ -1,17 +1,13 @@
-﻿// =====================================
-// SERVICES PAGE JS
-// =====================================
+﻿let isSubmitting = false;
 
-let isSubmitting = false;
-
-// -------------------- MODAL TOGGLE --------------------
+// Modal toggle
 function togglePatientForm() {
     const modal = document.getElementById("patientFormModal");
     if (!modal) return;
     modal.classList.toggle("hidden");
 }
 
-// -------------------- CAPITALIZATION HELPERS --------------------
+// Capitalization helpers
 function capitalizeWords(text) {
     return text
         .toLowerCase()
@@ -26,7 +22,7 @@ function capitalizeFirstLetter(text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-// -------------------- FINANCIAL HELPERS --------------------
+// Finance helpers
 function updateDebit(serviceField, debitField, creditField, balanceField, servicePrices) {
     const selectedService = serviceField.value;
     const price = servicePrices[selectedService] || 0;
@@ -40,7 +36,7 @@ function updateBalance(debitField, creditField, balanceField) {
     balanceField.value = debit - credit;
 }
 
-// -------------------- DOM READY --------------------
+
 document.addEventListener("DOMContentLoaded", () => {
     const servicePrices = {
         "Consultation": 500,
@@ -79,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// -------------------- SUBMIT PATIENT FORM --------------------
+// Submit patient form
 async function submitPatientForm(e) {
     e.preventDefault();
     if (isSubmitting) return;
@@ -88,7 +84,7 @@ async function submitPatientForm(e) {
     const form = e.target;
     let hasError = false;
 
-    // -------------------- VALIDATIONS --------------------
+    // Validations
     const ageInput = form.querySelector("input[name='age']");
     const age = parseInt(ageInput.value);
     if (!age || age <= 0) {
@@ -112,7 +108,6 @@ async function submitPatientForm(e) {
         return;
     }
 
-    // -------------------- PAYLOAD --------------------
     const payload = {
         patientName: capitalizeWords(form.patientName.value),
         age,
@@ -145,7 +140,6 @@ async function submitPatientForm(e) {
         togglePatientForm();
         showSuccessModal("Patient added successfully!");
 
-        // -------------------- REDIRECT TO PM PAGE --------------------
         setTimeout(() => {
             window.location.href = "/PatientManagement"; // Redirect to PM page
         }, 1000); // small delay to show success modal
@@ -158,7 +152,7 @@ async function submitPatientForm(e) {
     }
 }
 
-// -------------------- FIELD ERRORS --------------------
+// Field errors
 function showFieldError(input, message) {
     input.classList.add("input-error");
     const error = document.createElement("div");

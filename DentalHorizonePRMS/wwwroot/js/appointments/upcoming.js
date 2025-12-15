@@ -1,13 +1,6 @@
-﻿// =====================================
-// UPCOMING APPOINTMENTS PAGE JS
-// =====================================
-
-let upcomingAppointments = [];
+﻿let upcomingAppointments = [];
 let selectedAppointmentId = null;
 
-// -------------------------------------
-// INIT
-// -------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
     loadUpcomingAppointments();
 
@@ -27,9 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (confirmCancelBtn) confirmCancelBtn.onclick = confirmCancel;
 });
 
-// -------------------------------------
-// LOAD UPCOMING APPOINTMENTS
-// -------------------------------------
+
 async function loadUpcomingAppointments() {
     try {
         const res = await fetch("/api/Patient/upcoming-appointments");
@@ -40,9 +31,6 @@ async function loadUpcomingAppointments() {
     }
 }
 
-// -------------------------------------
-// RENDER TABLE
-// -------------------------------------
 function renderUpcoming(list) {
     const tbody = document.getElementById("upcomingTable");
     tbody.innerHTML = "";
@@ -56,7 +44,9 @@ function renderUpcoming(list) {
             <td class="px-4 py-2">${formatDate(a.nextAppointment)}</td>
             <td class="px-4 py-2">${a.service}</td>
             <td class="px-4 py-2">${a.complaint}</td>
-            <td class="px-4 py-2 text-green-600 font-semibold">Upcoming</td>
+            <td class="px-4 py-2 ${statusColor(a.status)} font-semibold">
+                ${a.status}
+            </td>
             <td class="px-4 py-2 space-x-2">
                 <button onclick="openRescheduleModal(${a.id})"
                         class="text-blue-600 hover:underline">
@@ -72,9 +62,7 @@ function renderUpcoming(list) {
     });
 }
 
-// -------------------------------------
-// SEARCH FILTER
-// -------------------------------------
+
 function filterUpcoming() {
     const term = document.getElementById("searchUpcoming").value.toLowerCase();
     const filtered = upcomingAppointments.filter(a =>
@@ -83,9 +71,7 @@ function filterUpcoming() {
     renderUpcoming(filtered);
 }
 
-// -------------------------------------
-// RESCHEDULE MODAL
-// -------------------------------------
+// Reschedule modal
 function openRescheduleModal(id) {
     selectedAppointmentId = id;
     document.getElementById("newDate").value = "";
@@ -126,11 +112,7 @@ async function confirmReschedule() {
     }
 }
 
-
-
-// -------------------------------------
-// CANCEL MODAL
-// -------------------------------------
+// Cancel modal
 function openCancelModal(id) {
     selectedAppointmentId = id;
     document.getElementById("cancelModal").classList.remove("hidden");
@@ -166,10 +148,19 @@ async function confirmCancel() {
     }
 }
 
-// -------------------------------------
-// HELPERS
-// -------------------------------------
+// Helpers
 function formatDate(date) {
     if (!date) return "";
     return new Date(date).toLocaleDateString();
+}
+
+function statusColor(status) {
+    switch (status) {
+        case "Upcoming": return "text-green-600";
+        case "Cancelled": return "text-red-600";
+        case "Completed": return "text-gray-600";
+        case "Missed": return "text-orange-600";
+        case "No appointment": return "text-gray-400";
+        default: return "";
+    }
 }

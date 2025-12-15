@@ -1,11 +1,7 @@
-﻿// =====================================
-// PATIENT MANAGEMENT PAGE JS
-// =====================================
-
-let patients = [];
+﻿let patients = [];
 window.currentPatientId = null;
 
-// -------------------- LOAD PATIENTS --------------------
+
 async function loadPatients() {
     try {
         const response = await fetch("/api/Patient/active-patients");
@@ -21,7 +17,6 @@ async function loadPatients() {
     }
 }
 
-// -------------------- RENDER TABLE --------------------
 function renderPatients(list) {
     let tbody = document.getElementById("patientsTable");
     if (!tbody) return;
@@ -57,7 +52,6 @@ function renderPatients(list) {
     });
 }
 
-// -------------------- FILTERING --------------------
 function filterCustom() {
     const search = document.getElementById("searchInput").value.toLowerCase();
     const month = parseInt(document.getElementById("monthSelect").value);
@@ -74,7 +68,7 @@ function filterCustom() {
     renderPatients(filtered);
 }
 
-// -------------------- INIT --------------------
+
 document.addEventListener("DOMContentLoaded", loadPatients);
 
 const servicePrices = {
@@ -89,7 +83,7 @@ const servicePrices = {
     "Full Denture": 1500
 };
 
-// -------------------- OPEN EDIT PATIENT FORM --------------------
+// Edit form
 async function openEditPatientForm(id) {
     const patient = await fetch(`/api/Patient/${id}`).then(r => r.json());
     currentPatientId = id;
@@ -149,12 +143,12 @@ async function openEditPatientForm(id) {
     }
 }
 
-// -------------------- CLOSE EDIT PATIENT MODAL --------------------
+// Close edit modal
 function closePmEditModal() {
     document.getElementById("pmEditModal").classList.add("hidden");
 }
 
-// -------------------- SUBMIT EDIT PATIENT FORM --------------------
+// Submit edit form
 async function submitPmEditForm(event) {
     event.preventDefault();
     if (!currentPatientId) return;
@@ -202,7 +196,7 @@ async function submitPmEditForm(event) {
     }
 }
 
-// -------------------- HELPERS --------------------
+// Helpers
 function formatDateForInput(date) {
     if (!date) return "";
     // If backend sends ISO string, slice only the date part
@@ -220,7 +214,7 @@ function updateBalance(debitInput, creditInput, balanceInput) {
     balanceInput.value = debit - credit;
 }
 
-// -------------------- DELETE PATIENT MODAL --------------------
+// Delete modal
 let patientIdToDelete = null;
 
 function openPmDeleteModal(id) {
