@@ -25,21 +25,12 @@ namespace DentalHorizonePRMS.Repositories
 			return "Upcoming";
 		}
 
-
-		//private string DetermineVisitStatus(DateTime dateOfVisit, string status)
-		//{
-		//	// If the visit date has passed and it's not missed, mark as Completed
-		//	if (dateOfVisit <= DateTime.Now && status != "Missed") return "Completed";
-		//	return "Pending";
-		//}
-
 		public async Task<int> AddPatientAsync(Patient patient)
 		{
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				patient.Status = DetermineStatus(patient.NextAppointment);
-				//patient.VisitStatus = DetermineVisitStatus(patient.DateOfVisit, patient.Status);
-
+				
 				var query = @"INSERT INTO Patient(
                         PatientName, Address, Telephone, Age, Occupation, Complaint,
                         DateOfVisit, NextAppointment, Service, VisitStatus, Status,
@@ -54,16 +45,17 @@ namespace DentalHorizonePRMS.Repositories
 			}
 		}
 
-		public async Task<List<Patient>> GetAllActivePatientsAsync()
+		public async Task<IEnumerable<Patient>> GetAllActivePatientsAsync()
 		{
-			using (var connection = new SqlConnection(_connectionString))
+			using (var connection = new SqlConnection(_connectionString)) 
 			{
-				var query = @"SELECT * FROM Patient WHERE PatientStatus = 'Active'";
-				var result = await connection.QueryAsync<Patient>(query);
-
-				return result.ToList();
+				var sql = @"SELECT * FROM Patient
+                WHERE PatientStatus = 'Active' AND Status <> 'Cancelled'";
+				return await connection.QueryAsync<Patient>(sql);
 			}
+			
 		}
+
 
 		public async Task<List<Patient>> GetAllPatientsAsync()
 		{
@@ -124,39 +116,22 @@ namespace DentalHorizonePRMS.Repositories
 			}
 		}
 
-        public async Task<bool> SoftDeletePatientAsync(int id)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                var query = @"DELETE FROM Patient WHERE Id = @Id";
-                var deleted = await connection.ExecuteAsync(query, new { Id = id });
-                return deleted > 0;
-            }
-        }
-
-        public async Task<bool> RestorePatientAsync(int id)
-		{
-			using (var connection = new SqlConnection(_connectionString)) 
-			{
-				var query = @"UPDATE Patient SET PatientStatus = 'Active' WHERE Id = @Id";
-				var restored = await connection.ExecuteAsync(query, new { Id = id });
-				return restored > 0;
-			}
-		}
-
 		public async Task<DashboardTotalsDTO> GetDashboardTotalsAsync()
 		{
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				var totalPatientsQuery = @"SELECT COUNT(*) FROM Patient";
+				var totalPatientsQuery = @"
+										 SELECT COUNT(*) 
+										 FROM Patient 
+										 WHERE PatientStatus = 'Active' AND Status <> 'Cancelled'";
 
 				var upcomingAppointmentsQuery = @"
 												SELECT COUNT(*) 
 												FROM Patient 
 												WHERE NextAppointment IS NOT NULL
 												  AND CAST(NextAppointment AS DATE) >= CAST(GETDATE() AS DATE)
-												  AND VisitStatus <> 'Completed'
-												  AND Status <> 'Cancelled'";
+												  AND Status = 'Upcoming'";
+
 
 				var missedAppointmentsQuery = @"
 											  SELECT COUNT(*) 
@@ -229,16 +204,6 @@ namespace DentalHorizonePRMS.Repositories
 			}
 		}
 
-		public async Task<bool> CancelAppointmentAsync(int id)
-		{
-			using (var connection = new SqlConnection(_connectionString))
-			{
-				var query = @"UPDATE Patient SET Status = 'Cancelled' WHERE Id = @Id";
-				var result = await connection.ExecuteAsync(query, new { Id = id });
-				return result > 0;
-			}
-		}
-
         public async Task<IEnumerable<Patient>> GetPatientsByDateAsync(int? month, int? year)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -289,35 +254,34 @@ namespace DentalHorizonePRMS.Repositories
                 return years.ToList();
             }
         }
-
-        public async Task<IEnumerable<Patient>> GetInactivePatients() 
-		{
-			using (var connection = new SqlConnection(_connectionString)) 
-			{
-				var query = @"SELECT * FROM Patient WHERE PatientStatus = 'Inactive'";
-				var result = await connection.QueryAsync<Patient>(query);
-				return result.ToList();
-				
-			}
-		}
-
 		public async Task<bool> ReschedulePatientAsync(int id, DateTime nextAppointment)
 		{
-			using (var connection = new SqlConnection(_connectionString))
-			{
-				var query = @"
-							UPDATE Patient
-							SET NextAppointment = @NextAppointment,
-								Status = CASE
-											WHEN @NextAppointment <= GETDATE() THEN 'Missed'
-											ELSE 'Upcoming'
-										  END
-							WHERE Id = @Id";
+			using var connection = new SqlConnection(_connectionString);
+			var query = @"
+						UPDATE Patient
+						SET NextAppointment = @NextAppointment,
+							Status = 'Upcoming'
+						WHERE Id = @Id";
 
-				var rowsAffected = await connection.ExecuteAsync(query, new { Id = id, NextAppointment = nextAppointment });
-				return rowsAffected > 0;
-			}
+			var rowsAffected = await connection.ExecuteAsync(query, new { Id = id, NextAppointment = nextAppointment });
+			return rowsAffected > 0;
 		}
+
+
+		public async Task<bool> CancelAppointmentAsync(int id)
+		{
+			using var connection = new SqlConnection(_connectionString);
+			var query = @"
+						UPDATE Patient
+						SET NextAppointment = NULL,
+							Status = 'Cancelled'
+						WHERE Id = @Id";
+
+			var rowsAffected = await connection.ExecuteAsync(query, new { Id = id });
+			return rowsAffected > 0;
+		}
+
+
 
 		public async Task<IEnumerable<Patient>> SearchPatientsAsync(string keyword, string status)
 		{
@@ -331,5 +295,15 @@ namespace DentalHorizonePRMS.Repositories
 				return await connection.QueryAsync<Patient>(query, new { Keyword = keyword, Status = status });
 			}
 		}
+
+		// In PatientRepository (single-table approach)
+		public async Task<IEnumerable<Patient>> GetArchivedPatientsAsync()
+		{
+			using var connection = new SqlConnection(_connectionString);
+			var sql = @"SELECT * FROM Patient
+                WHERE PatientStatus = 'Inactive' OR Status = 'Cancelled'";
+			return await connection.QueryAsync<Patient>(sql);
+		}
+
 	}
 }
