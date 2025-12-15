@@ -1,0 +1,257 @@
+﻿// =====================================
+// PATIENT MANAGEMENT PAGE JS
+// =====================================
+
+let patients = [];
+window.currentPatientId = null;
+
+// -------------------- LOAD PATIENTS --------------------
+async function loadPatients() {
+    try {
+        const response = await fetch("/api/Patient/active-patients");
+        if (!response.ok) throw new Error("Failed to load patients.");
+        const data = await response.json();
+        if (!Array.isArray(data)) throw new Error("Invalid response format");
+
+        patients = data;
+        renderPatients(patients);
+    } catch (err) {
+        console.error(err);
+        alert("Failed to load patients. Check console.");
+    }
+}
+
+// -------------------- RENDER TABLE --------------------
+function renderPatients(list) {
+    let tbody = document.getElementById("patientsTable");
+    if (!tbody) return;
+    if (tbody.tagName !== "TBODY") tbody = tbody.querySelector("tbody");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    list.forEach((p) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td class="px-4 py-2">${p.patientName}</td>
+            <td class="px-4 py-2">${p.age}</td>
+            <td class="px-4 py-2">${p.occupation}</td>
+            <td class="px-4 py-2">${p.telephone}</td>
+            <td class="px-4 py-2">${p.address}</td>
+            <td class="px-4 py-2">${formatDateForTable(p.dateOfVisit)}</td>
+            <td class="px-4 py-2">${p.nextAppointment ? formatDateForTable(p.nextAppointment) : "-"}</td>
+            <td class="px-4 py-2">${p.complaint}</td>
+            <td class="px-4 py-2">${p.service}</td>
+            <td class="px-4 py-2">${p.debit}</td>
+            <td class="px-4 py-2">${p.credit}</td>
+            <td class="px-4 py-2">${p.balance}</td>
+            <td class="px-4 py-2">${p.status}</td>
+            <td class="px-4 py-2">${p.visitStatus}</td>
+            <td class="px-4 py-2">${p.patientStatus}</td>
+            <td class="px-4 py-2 space-x-2">
+                <button onclick="openEditPatientForm(${p.id})" class="text-blue-600">Edit</button>
+                <button onclick="openPmDeleteModal(${p.id})" class="text-red-600">Archive</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// -------------------- FILTERING --------------------
+function filterCustom() {
+    const search = document.getElementById("searchInput").value.toLowerCase();
+    const month = parseInt(document.getElementById("monthSelect").value);
+    const year = parseInt(document.getElementById("yearSelect").value);
+
+    const filtered = patients.filter(p => {
+        const nameMatch = p.patientName.toLowerCase().includes(search);
+        const date = new Date(p.dateOfVisit);
+        const monthMatch = month === 0 || date.getMonth() + 1 === month;
+        const yearMatch = year === 0 || date.getFullYear() === year;
+        return nameMatch && monthMatch && yearMatch;
+    });
+
+    renderPatients(filtered);
+}
+
+// -------------------- INIT --------------------
+document.addEventListener("DOMContentLoaded", loadPatients);
+
+const servicePrices = {
+    "Consultation": 500,
+    "Cleaning / Prophylaxis": 1000,
+    "Tooth Extraction": 1000,
+    "Tooth Filling": 1000,
+    "Veneers": 5000,
+    "Jacket Crown": 5000,
+    "Retainer": 3000,
+    "Plastic Denture": 1000,
+    "Full Denture": 1500
+};
+
+// -------------------- OPEN EDIT PATIENT FORM --------------------
+async function openEditPatientForm(id) {
+    const patient = await fetch(`/api/Patient/${id}`).then(r => r.json());
+    currentPatientId = id;
+
+    const modal = document.getElementById("pmEditModal");
+    modal.classList.remove("hidden");
+
+    const form = document.getElementById("pmEditForm");
+
+    form.elements["patientName"].value = patient.patientName ?? "";
+    form.elements["age"].value = patient.age ?? "";
+    form.elements["occupation"].value = patient.occupation ?? "";
+    form.elements["telephone"].value = patient.telephone ?? "";
+    form.elements["address"].value = patient.address ?? "";
+    form.elements["dateOfVisit"].value = patient.dateOfVisit ? formatDateForInput(patient.dateOfVisit) : "";
+    form.elements["nextAppointment"].value = patient.nextAppointment ? formatDateForInput(patient.nextAppointment) : "";
+    form.elements["complaint"].value = patient.complaint ?? "";
+    form.elements["service"].value = patient.service ?? "";
+    form.elements["patientStatus"].value = patient.patientStatus ?? "Active";
+    form.elements["visitStatus"].value = patient.visitStatus ?? "Pending";
+    form.elements["debit"].value = patient.debit ?? 0;
+    form.elements["credit"].value = patient.credit ?? 0;
+    form.elements["balance"].value = patient.balance ?? 0;
+
+    // Balance auto-calc
+    const debitField = form.elements["debit"];
+    const creditField = form.elements["credit"];
+    const balanceField = form.elements["balance"];
+    updateBalance(debitField, creditField, balanceField);
+    debitField.oninput = () => updateBalance(debitField, creditField, balanceField);
+    creditField.oninput = () => updateBalance(debitField, creditField, balanceField);
+
+    // Checkbox logic
+    const checkbox = document.getElementById("editNoNextAppointmentCheckbox");
+    const nextAppointmentInput = form.elements["nextAppointment"];
+    checkbox.checked = !patient.nextAppointment;
+    nextAppointmentInput.disabled = checkbox.checked;
+    checkbox.onchange = () => {
+        nextAppointmentInput.disabled = checkbox.checked;
+        if (checkbox.checked) nextAppointmentInput.value = "";
+    };
+
+    // Debit auto-update when selecting a service
+    const serviceField = form.elements["service"];
+    serviceField.onchange = () => {
+        const selectedService = serviceField.value;
+        if (servicePrices[selectedService] !== undefined) {
+            debitField.value = servicePrices[selectedService];
+            updateBalance(debitField, creditField, balanceField);
+        }
+    };
+
+    // Run once when opening (so debit matches service immediately)
+    if (servicePrices[serviceField.value] !== undefined) {
+        debitField.value = servicePrices[serviceField.value];
+        updateBalance(debitField, creditField, balanceField);
+    }
+}
+
+// -------------------- CLOSE EDIT PATIENT MODAL --------------------
+function closePmEditModal() {
+    document.getElementById("pmEditModal").classList.add("hidden");
+}
+
+// -------------------- SUBMIT EDIT PATIENT FORM --------------------
+async function submitPmEditForm(event) {
+    event.preventDefault();
+    if (!currentPatientId) return;
+
+    const form = event.target;
+    const checkbox = document.getElementById("editNoNextAppointmentCheckbox");
+
+    const payload = {
+        patientName: form.elements["patientName"].value,
+        address: form.elements["address"].value,
+        telephone: form.elements["telephone"].value,
+        age: parseInt(form.elements["age"].value),
+        occupation: form.elements["occupation"].value,
+        complaint: form.elements["complaint"].value,
+        // send raw yyyy-mm-dd string (no timezone conversion)
+        dateOfVisit: form.elements["dateOfVisit"].value || null,
+        nextAppointment: checkbox.checked ? null : form.elements["nextAppointment"].value || null,
+        service: form.elements["service"].value,
+        visitStatus: form.elements["visitStatus"].value,
+        status: form.elements["visitStatus"].value,
+        patientStatus: form.elements["patientStatus"].value,
+        debit: parseFloat(form.elements["debit"].value),
+        credit: parseFloat(form.elements["credit"].value),
+        balance: parseFloat(form.elements["balance"].value)
+    };
+
+    try {
+        const response = await fetch(`/api/Patient/${currentPatientId}/update-patient`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            closePmEditModal();
+            await loadPatients();
+            showSuccessModal("Patient updated successfully!");
+        } else {
+            const errorText = await response.text();
+            showErrorModal("Failed to update patient: " + errorText);
+        }
+    } catch (err) {
+        console.error("Update error:", err);
+        showErrorModal("Network error while updating patient.");
+    }
+}
+
+// -------------------- HELPERS --------------------
+function formatDateForInput(date) {
+    if (!date) return "";
+    // If backend sends ISO string, slice only the date part
+    return date.toString().substring(0, 10); // yyyy-MM-dd
+}
+
+function formatDateForTable(date) {
+    if (!date) return "";
+    return new Date(date).toLocaleDateString(); // show nicely in table
+}
+
+function updateBalance(debitInput, creditInput, balanceInput) {
+    const debit = parseFloat(debitInput.value) || 0;
+    const credit = parseFloat(creditInput.value) || 0;
+    balanceInput.value = debit - credit;
+}
+
+// -------------------- DELETE PATIENT MODAL --------------------
+let patientIdToDelete = null;
+
+function openPmDeleteModal(id) {
+    patientIdToDelete = id;
+    document.getElementById("pmDeleteModal").classList.remove("hidden");
+}
+
+function closePmDeleteModal() {
+    patientIdToDelete = null;
+    document.getElementById("pmDeleteModal").classList.add("hidden");
+}
+
+async function confirmDeletePatient() {
+    if (!patientIdToDelete) return;
+
+    try {
+        const response = await fetch(`/api/ArchivedPatients/${patientIdToDelete}/soft-delete`, {
+            method: "PUT"
+        });
+
+        if (response.ok) {
+            closePmDeleteModal();
+            await loadPatients(); // reload active patients
+            showSuccessModal("Patient archived successfully!");
+        } else {
+            const errorText = await response.text();
+            showErrorModal("Failed to archive patient: " + errorText);
+        }
+    } catch (err) {
+        console.error("Delete error:", err);
+        showErrorModal("Network error while archiving patient.");
+    }
+}
+

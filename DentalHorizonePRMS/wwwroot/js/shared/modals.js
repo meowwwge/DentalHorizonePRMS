@@ -1,5 +1,4 @@
-﻿// Global variables
-let currentPatientId = null;
+﻿
 
 // Toggle patient form modal
 function togglePatientForm() {
