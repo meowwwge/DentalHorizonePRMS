@@ -92,13 +92,7 @@
     </div>
 </div>
 
-
-<script src="~/js/patientFunction.js"></script>
-
-<script>
-    async function loadMissedAppointments() {
-        const missed = await fetch('/api/patient/missed-appointments').then(res => res.json());
-        renderMissed(missed);
-    }
-    document.addEventListener("DOMContentLoaded", loadMissedAppointments);
-</script>
+@section Scripts {
+    <script src="~/js/shared/modals.js"></script>
+    <script src="~/js/appointments/missed.js"></script>
+}

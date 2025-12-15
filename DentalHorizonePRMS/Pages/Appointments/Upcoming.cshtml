@@ -95,14 +95,7 @@
 </div>
 
 
-<script src="~/js/patientFunction.js"></script>
-<script src="~/js/patientFormLogic.js"></script>
-<script src="~/js/modals.js"></script>
-
-<script>
-    async function loadUpcomingAppointments() {
-        const upcoming = await fetch('/api/Patient/upcoming-appointments').then(res => res.json());
-        renderUpcoming(upcoming);
-    }
-    document.addEventListener("DOMContentLoaded", loadUpcomingAppointments);
-</script>
+@section Scripts {
+    <script src="~/js/shared/modals.js"></script>
+    <script src="~/js/appointments/upcoming.js"></script>
+}
