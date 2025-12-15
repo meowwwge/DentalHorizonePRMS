@@ -30,6 +30,7 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IPatientRepository, PatientRepository>();
 builder.Services.AddTransient<IPatientVisitHistory, PatientVisitHistoryRepository>();
 builder.Services.AddTransient<IArchivedPatientRepository, ArchivedPatientRepository>();
+builder.Services.AddTransient<IReportRepository, ReportRepository>();
 #endregion
 
 var app = builder.Build();
