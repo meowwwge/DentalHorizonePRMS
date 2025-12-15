@@ -96,27 +96,6 @@ namespace DentalHorizonePRMS.Controllers
 			return Ok(_mapper.Map<PatientDTO>(existing));
 		}
 
-        [HttpGet("upcoming-appointments")]
-        public async Task<ActionResult<IEnumerable<UpcomingAppointmentsDTO>>> GetUpcomingAsync() 
-        {
-            var upcomingAppointments = await _patientRepository.GetUpcomingAppointmentsAsync();
-            return Ok(upcomingAppointments);
-        }
-
-		[HttpGet("missed-appointments")]
-		public async Task<ActionResult<IEnumerable<MissedAppointmentsDTO>>> GetMissedAsycn()
-		{
-			var missedAppointments = await _patientRepository.GetMissedAppointmentsAsync();
-			return Ok(missedAppointments);
-		}
-
-		[HttpGet("dashboard-totals")]
-        public async Task<ActionResult<DashboardTotalsDTO>> GetTotalsAsync() 
-        {
-            var dashboardTotals = await _patientRepository.GetDashboardTotalsAsync();
-            return Ok(dashboardTotals);
-        }
-
 		[HttpPut("{id}/reschedule")]
 		public async Task<IActionResult> RescheduleAsync(int id, [FromBody] DateTime nextAppointment)
 		{
@@ -143,7 +122,27 @@ namespace DentalHorizonePRMS.Controllers
 			return Ok(patients);
 		}
 
+		
+        [HttpGet("upcoming-appointments")]
+        public async Task<ActionResult<IEnumerable<UpcomingAppointmentsDTO>>> GetUpcomingAsync() 
+        {
+            var upcomingAppointments = await _patientRepository.GetUpcomingAppointmentsAsync();
+            return Ok(upcomingAppointments);
+        }
 
+		[HttpGet("missed-appointments")]
+		public async Task<ActionResult<IEnumerable<MissedAppointmentsDTO>>> GetMissedAsycn()
+		{
+			var missedAppointments = await _patientRepository.GetMissedAppointmentsAsync();
+			return Ok(missedAppointments);
+		}
+
+		[HttpGet("dashboard-totals")]
+        public async Task<ActionResult<DashboardTotalsDTO>> GetTotalsAsync() 
+        {
+            var dashboardTotals = await _patientRepository.GetDashboardTotalsAsync();
+            return Ok(dashboardTotals);
+        }
 
 	}
 }
