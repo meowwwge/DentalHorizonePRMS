@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DentalHorizonePRMS.DTOs.ArchivedPatients;
 using DentalHorizonePRMS.DTOs.Dashboard;
 using DentalHorizonePRMS.DTOs.PatientMedicalHistory;
 using DentalHorizonePRMS.DTOs.Patients;
@@ -15,6 +16,7 @@ namespace DentalHorizonePRMS.Profiles
 			CreateMap<Patient, PatientDTO>().ReverseMap();
 			CreateMap<User, UserDTO>().ReverseMap();
 			CreateMap<PatientVisitHistory, PatientVisitHistoryDTO>().ReverseMap();
+			CreateMap<ArchivedPatient, ArchivedPatientDTO>().ReverseMap();
 		}
 
 	}
