@@ -19,3 +19,23 @@ input[readonly] {
     background-color: #f3f3f3;
     cursor: not-allowed;
 }
+
+.input-error {
+    border-color: #dc2626 !important; /* red-600 */
+}
+
+.input-valid {
+    border-color: #16a34a !important; /* green-600 */
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-4px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.3s ease-in-out;
+}
