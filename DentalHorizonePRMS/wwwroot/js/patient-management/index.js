@@ -10,11 +10,62 @@ async function loadPatients() {
         if (!Array.isArray(data)) throw new Error("Invalid response format");
 
         patients = data;
+        generateYearOptions();
         renderPatients(patients);
     } catch (err) {
         console.error(err);
         alert("Failed to load patients. Check console.");
     }
+}
+
+function generateYearOptions() {
+    const yearSelect = document.getElementById("yearSelect");
+    if (!yearSelect) return;
+
+    // Clear existing options
+    yearSelect.innerHTML = "";
+
+    // Add "All"
+    yearSelect.innerHTML += `<option value="0">All</option>`;
+
+    if (patients.length === 0) return;
+
+    // Extract all years from patient records
+    const years = patients.map(p => new Date(p.dateOfVisit).getFullYear());
+
+    // Get unique years, sort descending
+    const uniqueYears = [...new Set(years)].sort((a, b) => b - a);
+
+    // Add each year
+    uniqueYears.forEach(y => {
+        yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+    });
+}
+
+// Disable month when year = All
+document.getElementById("yearSelect").addEventListener("change", function () {
+    const monthSelect = document.getElementById("monthSelect");
+
+    if (this.value === "0") {
+        monthSelect.value = "0";
+        monthSelect.disabled = true;
+    } else {
+        monthSelect.disabled = false;
+    }
+
+    filterCustom();
+});
+
+function resetFilters() {
+    document.getElementById("searchInput").value = "";
+    document.getElementById("monthSelect").value = "0"; // All
+    document.getElementById("yearSelect").value = "0";  // All
+
+    // Re-enable month dropdown
+    document.getElementById("monthSelect").disabled = false;
+
+    // Show all patients
+    renderPatients(patients);
 }
 
 function renderPatients(list) {
@@ -54,20 +105,39 @@ function renderPatients(list) {
 
 function filterCustom() {
     const search = document.getElementById("searchInput").value.toLowerCase();
-    const month = parseInt(document.getElementById("monthSelect").value);
-    const year = parseInt(document.getElementById("yearSelect").value);
 
-    const filtered = patients.filter(p => {
+    const month = document.getElementById("monthSelect").value; // "0" or "1-12"
+    const year = document.getElementById("yearSelect").value;   // "0" or "2024/2025"
+
+    let filtered = patients.filter(p => {
         const nameMatch = p.patientName.toLowerCase().includes(search);
+        if (!nameMatch) return false;
+
         const date = new Date(p.dateOfVisit);
-        const monthMatch = month === 0 || date.getMonth() + 1 === month;
-        const yearMatch = year === 0 || date.getFullYear() === year;
-        return nameMatch && monthMatch && yearMatch;
+        const visitMonth = date.getMonth() + 1;
+        const visitYear = date.getFullYear();
+
+        // ✅ Case 1: Year = All AND Month = All → show everything
+        if (year === "0" && month === "0") {
+            return true;
+        }
+
+        // ✅ Case 2: Year = specific AND Month = All → filter by year only
+        if (year !== "0" && month === "0") {
+            return visitYear == year;
+        }
+
+        // ✅ Case 3: Year = All AND Month = specific → ignore month filter
+        if (year === "0" && month !== "0") {
+            return true;
+        }
+
+        // ✅ Case 4: Year = specific AND Month = specific → filter both
+        return visitYear == year && visitMonth == month;
     });
 
     renderPatients(filtered);
 }
-
 
 document.addEventListener("DOMContentLoaded", loadPatients);
 

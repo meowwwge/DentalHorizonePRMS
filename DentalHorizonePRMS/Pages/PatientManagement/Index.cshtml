@@ -54,11 +54,20 @@
             <div class="flex flex-col">
                 <label for="yearSelect" class="text-xs font-medium text-gray-600">Year</label>
                 <select id="yearSelect" class="border rounded-lg px-3 py-2 text-sm" onchange="filterCustom()">
+                    <option value="0">All</option>
                     <option value="2025">2025</option>
                     <option value="2024">2024</option>
                 </select>
             </div>
         </div>
+
+		<div>
+            <button onclick="resetFilters()"
+                    class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                Reset Filters
+            </button>
+
+         </div>
     </div>
 
     <!-- Table -->
